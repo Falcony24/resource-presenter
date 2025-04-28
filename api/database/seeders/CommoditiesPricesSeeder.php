@@ -35,7 +35,7 @@ class CommoditiesPricesSeeder extends Seeder
 
                 foreach($data as $item){
                     $recordData[] = [
-                        'date' => "'" . date_create($item['@TIME_PERIOD'])->format("Y-m-d") . "'",
+                        'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
                         'value' => $item['@OBS_VALUE'],
                         'unit' => $unitID
                     ];

@@ -1,6 +1,8 @@
 Aby przygotować projekt z api do działania należy:
 - zainstalować zależności:
     composer install
+- zainicjalizować plik bazy sqlite:
+    touch ./api/database/database.sqlite
 - zainicjalozować bazę oraz ją zapełnić danymi (to rozwiązanie tymczasowe):
     php artisan migrate:fresh --seed
 
