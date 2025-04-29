@@ -26,5 +26,6 @@ class ConflictsSeeder extends Seeder
         $zip->close();
 
         $conflicts_csv = file_get_contents(base_path("UcdpPrioConflict_v24_1.csv"));
+
     }
 }

@@ -63,6 +63,24 @@ Route::get('/commodityPrices/{unit}/{commodity}', function (Request $request, $u
 
 Route::get("test", function (Request $request) {
 
+    $handle = fopen(base_path("UcdpPrioConflict_v24_1.csv"), "r");
+
+    if(!$handle) {
+        throw new Exception("Unable to open file!");
+    }
+
+    $result = [];
+
+    while($part = fgetcsv($handle)) {
+        $result[] = implode(' ', $part);
+    }
+
+    fclose($handle);
+
+    return $result;
+
+    return gettype($conflicts_csv = file_get_contents(base_path("UcdpPrioConflict_v24_1.csv")));
+
 //    dd("" . date_create("1900-01")->format("Y-m-d"));
 //    $url = "http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." . CommoditiesType::first()->name . "?startPeriod=1600&endPeriod=" .
 //        date('Y');
