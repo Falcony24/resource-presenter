@@ -9,27 +9,25 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema resPre
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `resPre` ;
-USE `resPre` ;
-
--- -----------------------------------------------------
--- Schema resPre
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `resPre` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+CREATE SCHEMA IF NOT EXISTS resPre DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `resPre`;
 
 -- -----------------------------------------------------
 -- Table `resPre`.`countries`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `resPre``countries` ;
+DROP TABLE IF EXISTS `resPre`.`countries` ;
 
-CREATE TABLE IF NOT EXISTS `resPre``countries` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
-  `region` VARCHAR(45) NOT NULL,
-  `longitude` DECIMAL(10,8) NOT NULL,
-  `latitude` DECIMAL(10,8) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `resPre`.`countries` (
+    `id` INT NOT NULL,
+    `name` VARCHAR(45) NOT NULL,
+    `region` VARCHAR(45) NOT NULL,
+    `longitude` DECIMAL(10,8) NOT NULL,
+    `latitude` DECIMAL(10,8) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `name_UNIQUE` (`name` ASC)
+    ) ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
 -- Table `resPre`.`conflicts`
@@ -48,13 +46,24 @@ CREATE TABLE IF NOT EXISTS `resPre`.`conflicts` (
   INDEX `fk_conflicts_countries1_idx` (`countries_id` ASC) VISIBLE,
   CONSTRAINT `fk_conflicts_countries1`
     FOREIGN KEY (`countries_id`)
-    REFERENCES `resPre``countries` (`id`)
+    REFERENCES `resPre`.`countries` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+-- -----------------------------------------------------
+-- Table `resPre`.`units`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `resPre`.`units` ;
+
+CREATE TABLE IF NOT EXISTS `resPre`.`units` (
+  `id` INT NOT NULL,
+  `unit` VARCHAR(32) NOT NULL,
+    PRIMARY KEY (`id`),
+UNIQUE INDEX `unit_UNIQUE` (`unit` ASC) VISIBLE)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `resPre`.`resources`
@@ -64,8 +73,15 @@ DROP TABLE IF EXISTS `resPre`.`resources` ;
 CREATE TABLE IF NOT EXISTS `resPre`.`resources` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(16) NOT NULL,
-  `unit` VARCHAR(32) NOT NULL,
-  PRIMARY KEY (`id`))
+    `description` TEXT NULL,
+    `unit_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+    INDEX `fk_resources_table11_idx` (`unit_id` ASC) VISIBLE,
+    CONSTRAINT `fk_resources_table11`
+    FOREIGN KEY (`unit_id`)
+    REFERENCES `resPre`.`units` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -121,6 +137,6 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
-CREATE USER 'user'@'%' IDENTIFIED BY 'userPass';
+CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'userPass';
 GRANT SELECT, INSERT, UPDATE, DELETE ON resPre.* TO 'user'@'%';
 FLUSH PRIVILEGES;
