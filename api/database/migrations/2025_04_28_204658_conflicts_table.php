@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('side_b_2nd');
             $table->integer('incompatibility');
             $table->string('territory_name');
+            $table->integer('year');
             $table->integer('intensity_level');
             $table->integer('cumulative_intensity');
             $table->integer('type_of_conflict');
