@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [CommoditiesPricesUnitsSeeder::class,
             CommoditiesTypesSeeder::class,
-            CommoditiesPricesSeeder::class]
+            CommoditiesPricesSeeder::class,
+            ConflictsSeeder::class]
         );
 
 //        User::factory()->create([

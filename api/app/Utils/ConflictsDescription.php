@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utlis;
+namespace App\Utils;
 
 class ConflictsDescription
 {

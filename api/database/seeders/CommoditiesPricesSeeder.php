@@ -30,7 +30,7 @@ class CommoditiesPricesSeeder extends Seeder
 
                     $unitID = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
 
-                    set_time_limit(1000000);
+                    set_time_limit(3000);
 
                     $recordData = [];
 

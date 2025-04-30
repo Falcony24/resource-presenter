@@ -4,6 +4,7 @@ use App\Models\CommoditiesPrice;
 use App\Models\CommoditiesPricesUnit;
 use App\Models\CommoditiesType;
 use App\Models\Conflict;
+use App\Utils\CompareDates as CompareDates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,10 +65,49 @@ Route::get('/commodityPrices/{unit}/{commodity}', function (Request $request, $u
 
 Route::get('/conflicts', function (Request $request) {
     $errorMessege = "";
+    $regions = [];
 
     set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorMessege) {
         return ["error" => true, "message" => $errorMessege];
     });
+
+    if($request->has('start_date') && $request->has('start_date_2nd') && CompareDates::isGreater
+        ($request->get('start_date'), $request->get('start_date_2nd'))) {
+        $errorMessege .= "start_date_2nd must be greater or equal than the start_date\n";
+    }
+
+    if($request->has('start_date_2nd') && $request->has('end_date') && CompareDates::isGreater
+        ($request->get('start_date_2nd'), $request->get('end_date'))) {
+        $errorMessege .= "end_date must be greater or equal than the start_date_2nd\n";
+    }
+
+    if($request->has('end_date') && $request->has('start_date') && CompareDates::isGreater
+        ($request->get('start_date'), $request->get('end_date'))) {
+        $errorMessege .= "end_date must be greater or equal than the start_date\n";
+    }
+
+    if($request->has('region')){
+        $regions = explode(',', $request->input('region'));
+        $tmp = getConflictsRegions();
+        foreach($regions as $region){
+            if(!in_array($region, $tmp)){
+                $errorMessege .= "Given region(s) is invalid\n";
+                break;
+            }
+        }
+    }
+
+        if($request->has('location')){
+        $location = $request->get('location');
+        $tmp = getConflictsLocations();
+        if(!in_array($location, $tmp)){
+            $errorMessege .= "Given location is invalid\n";
+        }
+    }
+
+    if($errorMessege !== ""){
+        throw new Exception($errorMessege);
+    }
 
     $query = Conflict::query();
 
@@ -75,21 +115,120 @@ Route::get('/conflicts', function (Request $request) {
         return $q->where('end_date', '<=', date_create($request->get('end_date'))->format('Y-m-d'));
     });
 
-    $query->when($request->has('region'), function ($q) use ($request) {
-        $regions = explode(',', $request->input('region'));
+    $query->when($request->has('start_date'), function ($q) use ($request) {
+        return $q->where('start_date', '>=', date_create($request->get('start_date_1st'))->format('Y-m-d'));
+    });
+
+    $query->when($request->has('start_date_2nd'), function ($q) use ($request) {
+        return $q->where('start_date_2nd', '>=', date_create($request->get('start_date_1st'))->format('Y-m-d'));
+    });
+
+    $query->when($request->has('region'), function ($q) use ($regions, $request) {
         return $q->whereIn('region', $regions);
     });
 
-//    $query->
+    $query->when($request->has('location'), function ($q) use ($request) {
+        return $q->where('location', '=', $request->get('location'));
+    });
 
     return $query->get();
 });
 
 Route::get('/conflicts/description', function (Request $request) {
-    return \App\Utlis\ConflictsDescription::$description;
+    return \App\Utils\ConflictsDescription::$description;
 });
 
 Route::get("test", function (Request $request) {
+
+    CommoditiesType::all()->each(function (CommoditiesType $commodityType) {
+        try{
+            $url = "http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." . $commodityType->name . "?startPeriod=1600&endPeriod=" . date('Y');
+
+            $response = file_get_contents($url);
+
+            $data = json_decode($response, true);
+
+            foreach ($data['CompactData']['DataSet']['Series'] as $batch){
+                $unit = $batch["@UNIT_MEASURE"];
+
+                $data = $batch["Obs"];
+
+                $unitID = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
+
+                set_time_limit(3000);
+
+                $recordData = [];
+
+                foreach($data as $item){
+                    $recordData[] = [
+                        'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
+                        'value' => $item['@OBS_VALUE'],
+                        'unit' => $unitID
+                    ];
+                }
+
+                $commodityType->prices()->createMany($recordData)->save();
+            }
+
+//                $unit = $data['CompactData']['DataSet']['Series'][0]["@UNIT_MEASURE"];
+//
+//                $data = $data['CompactData']['DataSet']['Series'][0]["Obs"];
+//
+//                $unitID = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
+//
+//                set_time_limit(1000000);
+//
+//                $recordData = [];
+//
+//                foreach($data as $item){
+//                    $recordData[] = [
+//                        'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
+//                        'value' => $item['@OBS_VALUE'],
+//                        'unit' => $unitID
+//                    ];
+//                }
+//
+//                $commodityType->prices()->createMany($recordData)->save();
+
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
+    });
+
+    dd(getConflictsIncompatibilities());
+
+    $tmpArr = Conflict::all()->groupBy('region')->toArray();
+
+    $return = [];
+
+    foreach($tmpArr as $key => $value){
+        $return[] = $key;
+    }
+
+    $tmpArr = $return;
+    $return = [];
+
+    foreach($tmpArr as $key => $value){
+        if(gettype($value) === 'integer'){
+            $return[] = $value;
+        } else {
+            $return = array_merge($return, array_map(function ($item) {
+                return (integer)$item;
+            }, explode(", ", $value)));
+//            $return[] = explode(", ", $value);
+        }
+    }
+
+    $return = array_unique($return);
+
+    dd(getConflictsRegions());
+
+    dd(CompareDates::isLess(date_create('2025-04-29'), 'now'));
+
+    echo gettype("tmp") . '<br>';
+    echo get_class(date_create("now")) . '<br>';
+
+    dd();
 
     $handle = fopen(base_path("UcdpPrioConflict_v24_1.csv"), "r");
 

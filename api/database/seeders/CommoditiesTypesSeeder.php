@@ -20,7 +20,7 @@ class CommoditiesTypesSeeder extends Seeder
 
         $data = $data['Structure']['CodeLists']['CodeList'][3]['Code'];
 
-        CommoditiesType::truncate();
+//        CommoditiesType::truncate();
 
         foreach($data as $item) {
             if($item["@value"] === "All_Indicators" || $item['Description']["#text"] === "All Indicators"){

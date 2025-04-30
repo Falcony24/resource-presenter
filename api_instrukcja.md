@@ -19,3 +19,9 @@ Pobieranie listy dostępnych jednostek dla kursu danego surowca:
 
 Pobieranie listy cen kusru surowca w poszczególnych miesiącach dla danego surowca w danej jednostce:
     https://localhost:8000/api/commodityUnits/{unit}/{commodity}
+	
+Pobieranie listy konfliktów:
+	https://localhost:8000/api/conflicts?start_date=2010&start_date_2nd=2011&end_date=2012&region=1,2&location=Russia
+
+Pobranie opisu danych konfliktów:
+	https://localhost:8000/api/conflicts/description
