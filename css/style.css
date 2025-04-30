@@ -170,13 +170,13 @@ header button:active {
   text-align: center;
   background-color: #ffffff;
   padding: 40px 20px;
-  margin: 0; /* Usunięcie marginesu wokół całej sekcji */
+  margin: 0;
 }
 
 #podsumowanie h2 {
   font-size: 2rem;
-  margin-bottom: 20px; /* Odstęp tylko poniżej nagłówka */
-  margin-top: 0; /* Usunięcie marginesu górnego */
+  margin-bottom: 20px;
+  margin-top: 0;
 }
 
 .impact-cards {
@@ -262,7 +262,7 @@ header button:active {
 }
 
 .footer-section ul li a:hover {
-  color: #928c61;
+  color: #3d3a39;
 }
 
 .social-icons {
@@ -286,7 +286,7 @@ header button:active {
 }
 
 
-/* --- Ogólne ustawienia dla responsywności --- */
+
 @media (max-width: 1200px) {
   header h1,
   header p,
@@ -296,7 +296,7 @@ header button:active {
 
 }
 
-/* Dla ekranów do 900px - zmiana układu mapy i kart na pionowy */
+
 @media (max-width: 900px) {
   .map-and-cards {
     flex-direction: column;
@@ -403,4 +403,25 @@ header button:active {
   header p{
     color:#efe7d8;
   }
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th, td {
+  border: 1px solid #efe7d8;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #80734e;
+}
+input[type="text"], input[type="date"], select {
+  padding: 8px;
+  margin-top: 20px;
+  margin-right: 10px;
+}
+input[type="text"] {
+  width: 300px;
 }
