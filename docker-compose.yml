@@ -33,6 +33,16 @@ services:
     networks:
       - app-network
 
+  frontend:
+    build: ./front
+    container_name: webpack_frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+    depends_on:
+      - api
+
 volumes:
   mysql_data:
 
