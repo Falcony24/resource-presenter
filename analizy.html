@@ -27,8 +27,25 @@
       <option value="">Wybierz surowiec</option>
     </select>
   </div>
+
+  <div class="mb-4">
+    <label for="timeRange" class="block text-sm font-medium text-gray-700"> Wybierz zakres czasu:</label>
+    <select id="timeRange" class="mt-1 block w-full max-w-xs p-2 border border-gray-300 rounded-md">
+      <option value="1945-2025">1945 - 2025</option>
+      <option value="1945-1955">1945 - 1955</option>
+      <option value="1955-1965">1955 - 1965</option>
+      <option value="1965-1975">1965 - 1975</option>
+      <option value="1975-1985">1975 - 1985</option>
+      <option value="1985-1995">1985 - 1995</option>
+      <option value="1995-2005">1995 - 2005</option>
+      <option value="2005-2015">2005 - 2015</option>
+      <option value="2015-2025">2015 - 2025</option>
+    </select>
+  </div>
+
   <div class="bg-white p-4 rounded shadow">
-    <canvas id="priceChart" width="800" height="400"></canvas>
+    <canvas id="priceChart"></canvas>
+
   </div>
 </div>
 

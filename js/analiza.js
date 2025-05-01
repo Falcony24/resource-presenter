@@ -52,6 +52,7 @@ Chart.register(
 );
 
 const resourceSelect = document.getElementById('resource');
+const timeRangeSelect = document.getElementById('timeRange');
 const canvas = document.getElementById('priceChart');
 const ctx = canvas.getContext('2d');
 let chart;
@@ -108,40 +109,54 @@ function getConflictAnnotations(resourceId) {
   return annotations;
 }
 
+function filterPriceDataByTimeRange(data, range) {
+  const [startYear, endYear] = range.split('-').map(Number);
+  return data.filter(d => {
+    const year = new Date(d.date).getFullYear();
+    return year >= startYear && year <= endYear;
+  });
+}
+
 function renderChart(resourceId) {
+  const selectedRange = timeRangeSelect.value;
   const data = priceData[resourceId] || [];
+  if (chart) chart.destroy();
+
   if (!data.length) {
-    alert('No price data available for this resource.');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     return;
   }
 
-  const labels = data.map(d => d.date);
-  const prices = data.map(d => d.price);
+  const filteredData = filterPriceDataByTimeRange(data, selectedRange);
 
-  if (chart) chart.destroy();
+  if (filteredData.length === 0) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
 
   chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: labels,
+      labels: filteredData.map(d => d.date),
       datasets: [{
         label: `${resources.find(r => r.id === parseInt(resourceId)).name} Price`,
-        data: data.map(d => ({ x: d.date, y: d.price })),
+        data: filteredData.map(d => ({ x: d.date, y: d.price })),
         borderColor: 'blue',
         fill: false
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false, // kluczowe dla responsywności!
       scales: {
         x: {
           type: 'time',
           time: {
-            unit: 'month'
+            unit: 'year'
           },
           title: {
             display: true,
-            text: 'Date'
+            text: 'Year'
           }
         },
         y: {
@@ -162,6 +177,13 @@ function renderChart(resourceId) {
 
 resourceSelect.addEventListener('change', (e) => {
   const resourceId = e.target.value;
+  if (resourceId) {
+    renderChart(resourceId);
+  }
+});
+
+timeRangeSelect.addEventListener('change', (e) => {
+  const resourceId = resourceSelect.value;
   if (resourceId) {
     renderChart(resourceId);
   }
