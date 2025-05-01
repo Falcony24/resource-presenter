@@ -32,7 +32,6 @@ services:
     volumes:
       - ./api:/var/www/html
       - ./api/.env.development:/var/www/html/.env
-
     networks:
       - app-network
 
