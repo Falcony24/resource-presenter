@@ -27,7 +27,7 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
-RUN cp .env.example .env && \
+RUN cp .env.development .env && \
     php artisan key:generate && \
     php artisan config:clear && \
     php artisan config:cache && \

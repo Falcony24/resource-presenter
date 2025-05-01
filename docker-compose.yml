@@ -1,7 +1,12 @@
 services:
   mysql:
-    build: ./db
+    image: mysql/mysql-server:8.0
     container_name: mysql-respres
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: resPre
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userPass
     ports:
       - "3306:3306"
     volumes:
@@ -25,7 +30,6 @@ services:
         condition: service_healthy
     volumes:
       - ./api:/var/www/html
-      - ./api/.env.example:/var/www/html/.env
     networks:
       - app-network
 
