@@ -33,7 +33,7 @@ class CommoditiesPricesSeeder extends Seeder
                     set_time_limit(3000);
 
                     $recordData = [];
-
+                    echo "ok";
                     foreach($data as $item){
                         $recordData[] = [
                             'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
