@@ -31,8 +31,11 @@ services:
         condition: service_healthy
     volumes:
       - ./api:/var/www/html
+      - ./api/.env.development:/var/www/html/.env
+
     networks:
       - app-network
+
 
   frontend:
     build: ./front
