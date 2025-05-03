@@ -21,9 +21,26 @@ services:
       retries: 3
       start_period: 45s
 
+  mysqld-exporter:
+    image: prom/mysqld-exporter:v0.15.0
+    container_name: mysqld-exporter
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: userPass
+    command:
+      - "--collect.info_schema.tables"
+      - "--collect.info_schema.innodb_metrics"
+      - "--collect.perf_schema.tablelocks"
+      - "--mysqld.username=user"
+      - "--mysqld.address=mysql:3306"
+    ports:
+      - "9104:9104"
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+
   redis:
-    image: redis:latest
-    container_name: redis-cache
+    image: redis:7.4.3
     ports:
       - "6379:6379"
     volumes:
@@ -35,6 +52,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+
+  redis-exporter:
+    image: oliver006/redis_exporter
+    container_name: redis-exporter
+    ports:
+      - "9121:9121"
+    networks:
+      - app-network
+    depends_on:
+      - redis
 
   api:
     build: ./api
@@ -62,6 +89,19 @@ services:
       - app-network
     depends_on:
       - api
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus-monitoring
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+      - redis
 
 volumes:
   mysql_data:
