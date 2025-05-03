@@ -14,7 +14,6 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/commoditiesTypes', function (Request $request) {
     $tmp = [];
-
     CommoditiesType::all()->each(function ($commodityType) use (&$tmp) {
         $tmp[] = ["name" => $commodityType->name,
             "description" => $commodityType->description];
