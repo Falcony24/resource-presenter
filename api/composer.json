@@ -12,11 +12,12 @@
     ],
     "require": {
         "php": "^8.2",
+        "ext-zip": "*",
         "finnhub/client": "dev-master",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "ext-zip": "*"
+        "spatie/laravel-blade-javascript": "^2.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
