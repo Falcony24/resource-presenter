@@ -1,26 +1,36 @@
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const glob = require('glob');
 
-module.exports = merge(common, {
-  mode: 'production',
+const entries = {};
+glob.sync('./js/*.js').forEach(file => {
+  const name = path.basename(file, '.js');
+  entries[name] = './' + file;
+});
+module.exports = {
+  entry: entries,
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+    filename: './js/[name].js',
+  },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './index.html',
-    }),
-    new CopyPlugin({
+    new CopyWebpackPlugin({
       patterns: [
-        { from: 'img', to: 'img' },
-        { from: 'css', to: 'css' },
-        { from: 'js/vendor', to: 'js/vendor' },
-        { from: 'icon.svg', to: 'icon.svg' },
-        { from: 'favicon.ico', to: 'favicon.ico' },
-        { from: 'robots.txt', to: 'robots.txt' },
-        { from: 'icon.png', to: 'icon.png' },
+        { from: 'index.html', to: 'index.html' },
         { from: '404.html', to: '404.html' },
+        { from: 'analizy.html', to: 'analizy.html' },
+        { from: 'konflikty.html', to: 'konflikty.html' },
+
+        { from: 'favicon.ico', to: 'favicon.ico' },
+        { from: 'icon.png', to: 'icon.png' },
+        { from: 'icon.svg', to: 'icon.svg' },
+        { from: 'robots.txt', to: 'robots.txt' },
         { from: 'site.webmanifest', to: 'site.webmanifest' },
+
+        { from: 'css', to: 'css' },
+        { from: 'img', to: 'img' },
       ],
     }),
   ],
-});
+};
