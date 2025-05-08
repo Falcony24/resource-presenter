@@ -73,20 +73,14 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes:
-      - ./api:/var/www/html
-      - ./api/.env.development:/var/www/html/.env
     networks:
       - app-network
-
 
   frontend:
     build: ./front
     container_name: webpack_frontend
     ports:
       - "3000:80"
-    volumes:
-      - ./front:/app
     networks:
       - app-network
     depends_on:
