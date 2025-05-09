@@ -22,6 +22,7 @@ module.exports = {
         { from: '404.html', to: '404.html' },
         { from: 'analizy.html', to: 'analizy.html' },
         { from: 'konflikty.html', to: 'konflikty.html' },
+        { from: 'surowce.html', to: 'surowce.html' },
 
         { from: 'favicon.ico', to: 'favicon.ico' },
         { from: 'icon.png', to: 'icon.png' },
