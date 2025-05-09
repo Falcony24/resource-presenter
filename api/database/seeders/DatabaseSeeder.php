@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             [CommoditiesPricesUnitsSeeder::class,
             CommoditiesTypesSeeder::class,
             CommoditiesPricesSeeder::class,
-            ConflictsSeeder::class]
+            ConflictsSeeder::class,
+            CountryCodeSeeder::class,]
         );
 
 //        User::factory()->create([

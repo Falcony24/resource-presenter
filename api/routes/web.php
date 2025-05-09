@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommodityController;
 use App\Http\Controllers\ConflictController;
 use App\Http\Controllers\TestApiController;
 use Illuminate\Support\Facades\Route;
@@ -9,7 +10,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/surowce', function () {
-    $tmp = new \App\Http\Controllers\CommodityController();
+    $tmp = new CommodityController();
     return view('components.commodities', ['commodities' => $tmp->getTypes(request())]);
 })->name('commodities');
 
@@ -19,7 +20,7 @@ Route::get('/konflikty', function () {
 })->name('conflicts');
 
 Route::get('/analiza', function () {
-    $tmp = new ConflictController();
-    return view('components.analysis', ['conflicts' => $tmp->getConflicts(request())]);
+    $tmp = new CommodityController();
+    return view('components.analysis', ['commodities' => $tmp->getTypes(request())]);
 })->name('analysis');
 

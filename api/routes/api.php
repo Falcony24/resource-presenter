@@ -24,6 +24,76 @@ Route::get('/conflicts', [ConflictController::class, 'getConflicts']);
 
 Route::get('/conflicts/description', [ConflictController::class, 'getDescription']);
 
+Route::get('/test', function (Request $request) {
+    $url = 'https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes';
+    $protocolDomain = 'https://en.wikipedia.org/wiki';
+    $html = file_get_contents($url);
+    $tmp_pos = strpos($html, '<h2 id="Current_ISO_3166_country_codes">Current ISO 3166 country codes</h2>');
+    $html = substr($html, $tmp_pos);
+    $html = substr($html, strpos($html, '<table class="sortable wikitable sticky-header-multi sort-under col1left col2left" style="text-align: center">'));
+    $html = substr($html, 0 , strpos($html, '</table>'));
+//    echo htmlspecialchars($html);
+//    echo $html;
+    $rowNum = 0;
+    $iter = 0;
+    echo '<table>';
+    while($rowNum !== false) {
+        $iter++;
+        $start = strpos($html, '<tr>', $rowNum);
+        $end = strpos($html, '</tr>', $start);
+        $rowNum = $end + 5;
+        if($iter < 3){
+            continue;
+        }
+        if ($start === false || $end === false) {
+            break;
+        }
+        $row = substr($html, $start, $end - $start + 5); // 5 = strlen('</tr>')
+//        echo htmlspecialchars($row) . '</br>';
+        $rowPos = 0;
+        $tmp = substr($row, strpos($row, '<a href="', strpos($row, '<a href="') + 9));
+        $tmp = substr($tmp, 9);
+        $wikiUrl = $protocolDomain . substr($tmp, 0, strpos($tmp, '"'));
+
+        $tmp = substr($tmp, strpos($tmp, '>') + 1);
+        $countryName = substr($tmp, 0, strpos($tmp, '<'));
+
+        $tmp = substr($tmp, strpos($tmp, '<td'));
+        $tmp = substr($tmp, strpos($tmp, '>') + 1);
+        $tmp = substr($tmp, strpos($tmp, '>') + 1);
+        $offitialCountryName = substr($tmp, 0 , strpos($tmp, '<'));
+
+        $tmp = substr($tmp, strpos($tmp, '<td') + 3);
+        $tmp = substr($tmp, strpos($tmp, '<td') + 3);
+        $tmp = substr($tmp, strpos($tmp, '<span') + 5);
+        $tmp = substr($tmp, strpos($tmp, '>') + 1);
+        $a_2_code = substr($tmp,0, strpos($tmp, '</span>'));
+
+        if($a_2_code == ""){
+            continue;
+        }
+
+        $tmp = substr($tmp, strpos($tmp, '<td') + 3);
+        $tmp = substr($tmp, strpos($tmp, '<span'));
+        $tmp = substr($tmp, strpos($tmp, '>') + 1);
+        $a_3_code = substr($tmp, 0, strpos($tmp, '</span>'));
+
+        $tmp = substr($tmp, strpos($tmp, '<td') + 4);
+        $tmp = substr($tmp, strpos($tmp, '<span') + 5);
+        $tmp = substr($tmp, strpos($tmp, '>') + 1);
+        $num_code = substr($tmp, 0, strpos($tmp, '</span>'));
+
+//        echo $protocolDomain . htmlspecialchars($wikiUrl);
+//        echo htmlspecialchars($tmp);
+//        echo htmlspecialchars($num_code);
+//        break;
+        echo '<tr>' . '<td>' . $wikiUrl . '</td>' . '<td>' . $countryName . '</td>' . '<td>' . $offitialCountryName . '</td>' . '<td>' .
+            $a_2_code . '</td>' . '<td>' . $a_3_code . '</td>' . '<td>' . $num_code . '</td>' . '</tr>';
+    }
+    echo '</table>';
+
+});
+
 //Route::get("test", function (Request $request) {
 //
 //    dd(phpversion());

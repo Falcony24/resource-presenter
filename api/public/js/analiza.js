@@ -1,8 +1,24 @@
-const resources = [
-  { id: 1, name: 'Oil' },
-  { id: 2, name: 'Natural Gas' },
-  { id: 3, name: 'Copper' }
-];
+var resources = [];
+
+async function getCommodities(){
+    await fetch('/api/commoditiesTypes')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach((elem, index) => {
+                resources.push({
+                    id: index,
+                    name: elem.name
+                })
+            });
+            populateResources();
+        }).catch(e => {
+            console.log(e)
+        });
+}
+
+getCommodities();
+
+console.log(resources)
 
 const conflicts = [
   { id: 1, name: 'Gulf War', start_date: '1990-08-02', end_date: '1991-02-28' },
@@ -189,6 +205,6 @@ timeRangeSelect.addEventListener('change', (e) => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  populateResources();
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//   populateResources();
+// });

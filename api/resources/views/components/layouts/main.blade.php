@@ -9,6 +9,9 @@
         <link rel="stylesheet" href="{{ asset($style) }}">
     @endforeach
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
+    @foreach($scripts as $script)
+        <script src="{{ $script }}"></script>
+    @endforeach
     <script src="{{asset('js/app.js')}}"></script>
 </head>
 <body>
