@@ -1,9 +1,0 @@
-services:
-  api:
-    volumes:
-      - ./api:/var/www/html
-      - ./api/.env.development:/var/www/html/.env
-
-  frontend:
-    volumes:
-      - ./front:/app
