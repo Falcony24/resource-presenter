@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Surowce</title>
+  <link rel="stylesheet" href="css/table.css">
+
+</head>
+<body>
+<nav>
+  <a href="index.html">Główna</a> |
+  <a href="konflikty.html">Zobacz konflikty</a> |
+  <a href="surowce.html">Zobacz dane surowców</a> |
+  <a href="analizy.html">Analizy</a>
+</nav>
+
+<h1>Lista surowców</h1>
+
+<div class="filters">
+  <input type="text" id="searchInput" placeholder="Szukaj surowca..." onkeyup="filterResources()">
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>Nazwa</th>
+    <th>Opis</th>
+  </tr>
+  </thead>
+  <tbody id="resourcesTableBody">
+
+  </tbody>
+</table>
+
+<div class="pagination" id="pagination"></div>
+
+
+  <script src="js/surowce.js"></script>
+
+</body>
+</html>

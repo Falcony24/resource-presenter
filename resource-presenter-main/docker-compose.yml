@@ -1,0 +1,108 @@
+services:
+  mysql:
+    image: mysql/mysql-server:8.0
+    container_name: mysql-respres
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: resPre
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userPass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+
+  mysqld-exporter:
+    image: prom/mysqld-exporter:v0.15.0
+    container_name: mysqld-exporter
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: userPass
+    command:
+      - "--collect.info_schema.tables"
+      - "--collect.info_schema.innodb_metrics"
+      - "--collect.perf_schema.tablelocks"
+      - "--mysqld.username=user"
+      - "--mysqld.address=mysql:3306"
+    ports:
+      - "9104:9104"
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+
+  redis:
+    image: redis:7.4.3
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis-exporter:
+    image: oliver006/redis_exporter
+    container_name: redis-exporter
+    ports:
+      - "9121:9121"
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
+  api:
+    build: ./api
+    container_name: laravel_api
+    ports:
+      - "5000:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  frontend:
+    build: ./front
+    container_name: webpack_frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+    depends_on:
+      - api
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus-monitoring
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+      - redis
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge
