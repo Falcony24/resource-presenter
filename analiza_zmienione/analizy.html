@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wpływ konfliktów na ceny surowców</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/analiza.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body class="bg-gray-100">
+<nav>
+  <a href="index.html">Główna</a>
+  <a href="konflikty.html">Zobacz konflikty</a>
+  <a href="surowce.html">Zobacz dane surowców</a>
+  <a href="analizy.html">Analizy</a>
+</nav>
+<div class="container mx-auto px-4 pb-4 pt-0">
+
+  <h1 class="text-2xl font-bold mb-4  pt-4">Wpływ konfliktów na ceny surowców</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+    <div class="flex flex-col gap-4 ">
+      <div>
+        <label for="conflictRegion" class="block text-sm font-medium text-gray-700">Wybierz region konfliktu:</label>
+        <select id="conflictRegion" class="mt-1 block w-full max-w-xs p-2 border border-gray-300 rounded-md">
+          <option value="">Wybierz region</option>
+        </select>
+      </div>
+      <div>
+        <label for="resource" class="block text-sm font-medium text-gray-700">Wybierz surowiec:</label>
+        <select id="resource" class="mt-1 block w-full max-w-xs p-2 border border-gray-300 rounded-md">
+          <option value="">Wybierz surowiec</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-4 -mt-10">
+      <div>
+        <label for="startDate" class="block text-sm font-medium text-gray-700">Wybierz datę początkową:</label>
+        <input type="date" id="startDate" class="mt-1 block w-full max-w-xs p-2 border border-gray-300 rounded-md">
+      </div>
+      <div>
+        <label for="endDate" class="block text-sm font-medium text-gray-700">Wybierz datę końcową:</label>
+        <input type="date" id="endDate" class="mt-1 block w-full max-w-xs p-2 border border-gray-300 rounded-md">
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white p-4 rounded shadow">
+    <canvas id="priceChart" height="400"></canvas>
+  </div>
+</div>
+<script src="js/analiza.js"></script>
+</body>
+</html>
