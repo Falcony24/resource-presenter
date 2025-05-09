@@ -9,9 +9,9 @@
         <div class="footer-section">
             <h3>Szybkie linki</h3>
             <ul>
-                <li><a href="konflikty.html">Konflikty</a></li>
-                <li><a href="surowce.html">Surowce</a></li>
-                <li><a href="analizy.html">Analizy</a></li>
+                <li><a href="{{ route('conflicts') }}">Konflikty</a></li>
+                <li><a href="{{ route('commodities') }}">Surowce</a></li>
+                <li><a href="{{ route('analysis') }}">Analizy</a></li>
             </ul>
         </div>
         <div class="footer-section">

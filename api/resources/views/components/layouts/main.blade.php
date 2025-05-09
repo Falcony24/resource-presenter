@@ -1,4 +1,4 @@
-@props(['title' => 'conflicts', 'styleSheets' => []])
+@props(['title' => 'conflicts', 'styleSheets' => [], 'scripts' => []])
 
 <!DOCTYPE html>
 <html lang="pl">

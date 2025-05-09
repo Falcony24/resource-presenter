@@ -17,3 +17,9 @@ Route::get('/konflikty', function () {
     $tmp = new ConflictController();
     return view('components.conflicts', ['conflicts' => $tmp->getConflicts(request())]);
 })->name('conflicts');
+
+Route::get('/analiza', function () {
+    $tmp = new ConflictController();
+    return view('components.analysis', ['conflicts' => $tmp->getConflicts(request())]);
+})->name('analysis');
+
