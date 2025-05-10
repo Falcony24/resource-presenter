@@ -1,0 +1,1 @@
+<script><?php echo $javaScript; ?></script><?php /**PATH C:\Users\WronM\Documents\resource-presenter\api2\vendor\spatie\laravel-blade-javascript\src/../resources/views/index.blade.php ENDPATH**/ ?>

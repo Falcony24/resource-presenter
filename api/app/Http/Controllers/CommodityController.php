@@ -59,4 +59,25 @@ class CommodityController extends Controller
             return $result;
         }
     }
+      // Metoda wyświetlająca formularz dodawania surowca
+    public function createPriceForm()
+    {
+        return view('components.create');
+    }
+
+    // Metoda do zapisywania surowca
+    public function storePrice(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
+        $commodity = new CommoditiesType();
+        $commodity->name = $validated['name'];
+        $commodity->description = $validated['description'];
+        $commodity->save();
+
+        return redirect()->route('commodities.create')->with('success', 'Surowiec został dodany.');
+    }
 }
