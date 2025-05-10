@@ -32,8 +32,39 @@ Route::get('/conflicts/description', [ConflictController::class, 'getDescription
 
 Route::get('/test', function (Request $request) {
     $url = 'https://en.wikipedia.org/wiki/List_of_wars:_1990%E2%80%932002';
+    $url = 'https://api.wikimedia.org/core/v1/wikipedia/en/page/List_of_wars:_1990%E2%80%932002/html';
     $protocolDomain = 'https://en.wikipedia.org/wiki';
     $html = file_get_contents($url);
+
+//    $pos = strpos($html, '<tbody>');
+//    echo $pos;
+    $start = strpos($html, '<table ');
+    $end = strpos($html, '</table>');
+
+    $table = substr($html, $start, $end - $start + 8);
+    $result = '';
+
+    $start = 0;
+    $end = 0;
+
+
+    $iter = 0;
+    $curpos = 0;
+
+    echo '<table><tbody>';
+    while($start !== false || $end !== false){
+        $iter++;
+        if($iter < 3){
+            continue;
+        }
+        $start = strpos($table, '<tr>', $end);
+        $end = strpos($table, '</tr>', $end);
+        $result .= substr($table, $start, $end - $start);
+    echo $result;
+    }
+    echo '</tbody></table>';
+//    echo $html;
+//    return substr($html, $start, $end - $start + 8);
 });
 
 //Route::get("test", function (Request $request) {
