@@ -101,3 +101,22 @@ function getConflictsIncompatibilities():array {
 
     return $return;
 }
+
+function array_to_xml($array, SimpleXMLElement $xml = null) {
+    if ($xml === null) {
+        $xml = new SimpleXMLElement('<result/>');
+    }
+
+    foreach ($array as $key => $value) {
+        $key = is_numeric($key) ? "item$key" : $key;
+
+        if (is_array($value)) {
+            array_to_xml($value, $xml->addChild($key));
+        } else {
+            $xml->addChild($key, htmlspecialchars((string)$value));
+        }
+    }
+
+    return $xml->asXML();
+}
+

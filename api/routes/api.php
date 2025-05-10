@@ -34,8 +34,6 @@ Route::get('/test', function (Request $request) {
     $url = 'https://en.wikipedia.org/wiki/List_of_wars:_1990%E2%80%932002';
     $protocolDomain = 'https://en.wikipedia.org/wiki';
     $html = file_get_contents($url);
-
-
 });
 
 //Route::get("test", function (Request $request) {

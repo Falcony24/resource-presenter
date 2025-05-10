@@ -59,6 +59,7 @@ class CommodityController extends Controller
             return $result;
         }
     }
+
       // Metoda wyświetlająca formularz dodawania surowca
     public function createPriceForm()
     {

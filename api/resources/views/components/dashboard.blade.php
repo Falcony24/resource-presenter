@@ -32,12 +32,12 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="type" class="block text-sm font-medium text-gray-700">
+                            <label for="option" class="block text-sm font-medium text-gray-700">
                                 Wybierz dane
                             </label>
                             <select
-                                name="type"
-                                id="type"
+                                name="option"
+                                id="option"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
                                 required
                             >

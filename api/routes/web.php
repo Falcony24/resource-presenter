@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExportController;
 
 Route::post('/export', [ExportController::class, 'export'])->name('export');
+
 Route::get('/', function () {
     return view('components.home');
 })->name('home');
