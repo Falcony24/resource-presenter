@@ -1,2 +1,0 @@
-<img src="<?php echo e(asset('img/home.png')); ?>" alt="Logo" class="w-16 h-16">
-<?php /**PATH C:\Users\WronM\Documents\resource-presenter\api2\resources\views/components/application-logo.blade.php ENDPATH**/ ?>
