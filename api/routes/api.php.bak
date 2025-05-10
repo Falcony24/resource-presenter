@@ -10,12 +10,6 @@ use App\Utils\CompareDates as CompareDates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
-
-Route::get('/commodities/create', [CommodityController::class, 'createPriceForm'])->name('commodities.create');
-Route::post('/commodities/store', [CommodityController::class, 'storePrice'])->name('commodities.store');
-
-
 Route::get('/user', function (Request $request) {
     return $request->user();
 });

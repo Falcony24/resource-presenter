@@ -6,6 +6,10 @@
     <x-header-nav />
 
     <h1>Lista konfliktów zbrojnych</h1>
+        <!-- Przycisk z ikonką plusa w prawym górnym rogu -->
+        <a href="" style="position: absolute; top: 80px; right: 550px;">
+            <img src="{{ asset('img/plus.png') }}" alt="Dodaj" style="width: 32px; height: 32px;">
+        </a>
 
     <div class="filters">
         <input type="text" id="searchInput" placeholder="Szukaj konfliktu..." onkeyup="filterConflicts()">
@@ -28,6 +32,16 @@
         </div>
     </div>
 
+<div class="login-prompt" style="display: flex; align-items: center; margin-bottom: 20px;">
+    <p style="margin: 0;">Chcesz zaeksportować dane?</p>
+    <form action="{{ route('register') }}" method="get" style="margin-left: 12px;">
+        <button type="submit" style="padding: 8px 16px; background-color: #5e5437; color: white; border: none; border-radius: 4px;">
+            Zarejestruj się
+        </button>
+    </form>
+</div>
+
+
 
     <table>
         <thead>
@@ -39,7 +53,6 @@
         </tr>
         </thead>
         <tbody id="conflictsTableBody">
-
         </tbody>
     </table>
 

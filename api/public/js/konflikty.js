@@ -53,27 +53,58 @@ function renderConflictsPage(page) {
 
   renderPagination();
 }
+ function renderPagination() {
+        const paginationDiv = document.getElementById('pagination');
+        paginationDiv.innerHTML = '';
 
-function renderPagination() {
-  const paginationDiv = document.getElementById('pagination');
-  paginationDiv.innerHTML = '';
+        const totalPages = Math.ceil(filteredConflicts.length / conflictsPerPage);
+        if (totalPages <= 1) return;
 
-  const totalPages = Math.ceil(filteredConflicts.length / conflictsPerPage);
+        const maxButtons = 10;
+        let startPage = Math.floor((currentPage - 1) / maxButtons) * maxButtons + 1;
+        let endPage = Math.min(startPage + maxButtons - 1, totalPages);
 
-  if (totalPages <= 1) return;
+        if (startPage > 1) {
+            const prevEllipsis = document.createElement('button');
+            prevEllipsis.textContent = '...';
+            prevEllipsis.onclick = () => {
+                currentPage = startPage - 1;
+                renderConflictsPage(currentPage);
+            };
+            paginationDiv.appendChild(prevEllipsis);
+        }
 
-  for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement('button');
-    btn.textContent = i;
-    if (i === currentPage) btn.classList.add('active');
-    btn.onclick = () => {
-      currentPage = i;
-      renderConflictsPage(currentPage);
-      window.scrollTo(0,0); // przewiń do góry po zmianie strony
-    };
-    paginationDiv.appendChild(btn);
-  }
-}
+        for (let i = startPage; i <= endPage; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            if (i === currentPage) btn.classList.add('active');
+            btn.onclick = () => {
+                currentPage = i;
+                renderConflictsPage(currentPage);
+                window.scrollTo(0, 0);
+            };
+            paginationDiv.appendChild(btn);
+        }
+
+        if (endPage < totalPages) {
+            const nextEllipsis = document.createElement('button');
+            nextEllipsis.textContent = '...';
+            nextEllipsis.onclick = () => {
+                currentPage = endPage + 1;
+                renderConflictsPage(currentPage);
+            };
+            paginationDiv.appendChild(nextEllipsis);
+
+            const lastPageBtn = document.createElement('button');
+            lastPageBtn.textContent = totalPages;
+            if (currentPage === totalPages) lastPageBtn.classList.add('active');
+            lastPageBtn.onclick = () => {
+                currentPage = totalPages;
+                renderConflictsPage(currentPage);
+            };
+            paginationDiv.appendChild(lastPageBtn);
+        }
+    }
 
 function filterConflicts() {
   const searchInput = document.getElementById('searchInput').value.toLowerCase();
