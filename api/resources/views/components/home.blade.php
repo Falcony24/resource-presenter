@@ -1,12 +1,12 @@
 @props(['styleSheets' => ['css/app.css']])
 
-<x-layouts.main :styleSheets="['css/style.css', 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css']">
+<x-layouts.main :styleSheets="['css/style.css', 'css/footer.css', 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css']">
     <x-header-nav />
 
     <header class="background-image">
         <h1>Konflikty a Ceny Surowców</h1>
         <p>Analiza wpływu konfliktów na rynki surowców.</p>
-        <a href="analizy.html">
+        <a href="{{ route('analysis') }}">
             <button>Zobacz</button>
         </a>
 
@@ -66,8 +66,6 @@
             </div>
         </div>
     </section>
-
-    <x-footer />
 
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="{{ asset('js/mapa.js') }}"></script>

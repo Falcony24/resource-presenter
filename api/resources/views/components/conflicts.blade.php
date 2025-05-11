@@ -1,7 +1,7 @@
 @props(['conflicts' => [], 'conflictsLocations' => getConflictsLocations()])
 @javascript(['conflicts' => $conflicts, 'conflictsLocations' => $conflictsLocations])
 
-<x-layouts.main :styleSheets="['css/table.css']">
+<x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']">
     <body>
     <x-header-nav />
 

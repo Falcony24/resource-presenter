@@ -15,59 +15,30 @@ class CommoditiesPricesSeeder extends Seeder
      */
     public function run(): void
     {
-        CommoditiesType::all()->each(function (CommoditiesType $commodityType) {
-            try{
-                $url = "http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." . $commodityType->name . "?startPeriod=1600&endPeriod=" . date('Y');
+        set_time_limit(30000);
 
-                $response = file_get_contents($url);
+        foreach (CommoditiesType::pluck('name')->toArray() as $commodityType) {
 
-                $data = json_decode($response, true);
+            $tmp = json_decode(file_get_contents("http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." .
+                $commodityType .
+                "?startPeriod=1900&endPeriod=" . date('Y')), true);
 
-                foreach ($data['CompactData']['DataSet']['Series'] as $batch){
-                    $unit = $batch["@UNIT_MEASURE"];
+            $commodityId = CommoditiesType::where('name', $commodityType)->first()->id;
 
-                    $data = $batch["Obs"];
+            foreach ($tmp['CompactData']['DataSet']['Series'] as $batch) {
+                $unit = $batch['@UNIT_MEASURE'];
+                $unitId = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
+                $values = $batch['Obs'];
 
-                    $unitID = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
-
-                    set_time_limit(3000);
-
-                    $recordData = [];
-                    echo "ok";
-                    foreach($data as $item){
-                        $recordData[] = [
-                            'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
-                            'value' => $item['@OBS_VALUE'],
-                            'unit' => $unitID
-                        ];
-                    }
-
-                    $commodityType->prices()->createMany($recordData)->save();
+                foreach ($values as $value) {
+                    CommoditiesPrice::create([
+                        'commodity' => $commodityId,
+                        'date' => date_create($value['@TIME_PERIOD'])->format("Y-m-t"),
+                        'value' => $value['@OBS_VALUE'],
+                        'unit' => $unitId,
+                    ])->save();
                 }
-
-//                $unit = $data['CompactData']['DataSet']['Series'][0]["@UNIT_MEASURE"];
-//
-//                $data = $data['CompactData']['DataSet']['Series'][0]["Obs"];
-//
-//                $unitID = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
-//
-//                set_time_limit(1000000);
-//
-//                $recordData = [];
-//
-//                foreach($data as $item){
-//                    $recordData[] = [
-//                        'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
-//                        'value' => $item['@OBS_VALUE'],
-//                        'unit' => $unitID
-//                    ];
-//                }
-//
-//                $commodityType->prices()->createMany($recordData)->save();
-
-            } catch (\Exception $exception) {
-
             }
-        });
+        };
     }
 }

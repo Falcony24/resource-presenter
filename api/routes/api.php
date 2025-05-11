@@ -31,40 +31,155 @@ Route::get('/conflicts', [ConflictController::class, 'getConflicts']);
 Route::get('/conflicts/description', [ConflictController::class, 'getDescription']);
 
 Route::get('/test', function (Request $request) {
-    $url = 'https://en.wikipedia.org/wiki/List_of_wars:_1990%E2%80%932002';
-    $url = 'https://api.wikimedia.org/core/v1/wikipedia/en/page/List_of_wars:_1990%E2%80%932002/html';
-    $protocolDomain = 'https://en.wikipedia.org/wiki';
-    $html = file_get_contents($url);
 
-//    $pos = strpos($html, '<tbody>');
-//    echo $pos;
-    $start = strpos($html, '<table ');
-    $end = strpos($html, '</table>');
+    $finalRet = [];
 
-    $table = substr($html, $start, $end - $start + 8);
-    $result = '';
+    set_time_limit(30000);
 
-    $start = 0;
-    $end = 0;
+    foreach(CommoditiesType::pluck('name')->toArray() as $commodityType) {
 
+        $tmp = json_decode(file_get_contents("http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." .
+            $commodityType .
+            "?startPeriod=1900&endPeriod=" . date('Y')), true);
 
-    $iter = 0;
-    $curpos = 0;
+        $commodityId = CommoditiesType::where('name', $commodityType)->first()->id;
 
-    echo '<table><tbody>';
-    while($start !== false || $end !== false){
-        $iter++;
-        if($iter < 3){
-            continue;
+        foreach($tmp['CompactData']['DataSet']['Series'] as $batch){
+            $unit = $batch['@UNIT_MEASURE'];
+            $unitId = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
+            $values = $batch['Obs'];
+
+            foreach($values as $value){
+                CommoditiesPrice::create([
+                    'commodity' => $commodityId,
+                    'date' => date_create($value['@TIME_PERIOD'])->format("Y-m-t"),
+                    'value' => $value['@OBS_VALUE'],
+                    'unit' => $unitId,
+                ])->save();
+            }
         }
-        $start = strpos($table, '<tr>', $end);
-        $end = strpos($table, '</tr>', $end);
-        $result .= substr($table, $start, $end - $start);
-    echo $result;
-    }
-    echo '</tbody></table>';
-//    echo $html;
-//    return substr($html, $start, $end - $start + 8);
+    };
+
+//    return $tmp['CompactData']['DataSet']['Series'];
+
+    return CommoditiesType::first()->name;
+
+    CommoditiesType::all()->each(function (CommoditiesType $commodityType) {
+        try{
+            $url = "http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." . $commodityType->name .
+                "?startPeriod=1900&endPeriod=" . date('Y');
+
+            $response = file_get_contents($url);
+
+            $data = json_decode($response, true);
+
+            return $data;
+
+            $finalRet[] = $data;
+
+//            foreach ($data['CompactData']['DataSet']['Series'] as $batch){
+//                $unit = $batch["@UNIT_MEASURE"];
+//
+//                $data = $batch["Obs"];
+//
+//                $unitID = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
+//
+//                set_time_limit(3000);
+//
+//                $recordData = [];
+//                echo "ok";
+//                foreach($data as $item){
+//                    $recordData[] = [
+//                        'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
+//                        'value' => $item['@OBS_VALUE'],
+//                        'unit' => $unitID
+//                    ];
+//                }
+//
+//                $finalRet[] = $recordData;
+//
+////                $commodityType->prices()->createMany($recordData)->save();
+//            }
+
+//                $unit = $data['CompactData']['DataSet']['Series'][0]["@UNIT_MEASURE"];
+//
+//                $data = $data['CompactData']['DataSet']['Series'][0]["Obs"];
+//
+//                $unitID = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
+//
+//                set_time_limit(1000000);
+//
+//                $recordData = [];
+//
+//                foreach($data as $item){
+//                    $recordData[] = [
+//                        'date' => date_create($item['@TIME_PERIOD'])->format("Y-m-t"),
+//                        'value' => $item['@OBS_VALUE'],
+//                        'unit' => $unitID
+//                    ];
+//                }
+//
+//                $commodityType->prices()->createMany($recordData)->save();
+
+        } catch (\Exception $exception) {
+            return 'ERROR';
+        }
+    });
+
+//    return json_encode($finalRet);
+    return $finalRet;
+
+    //===================== wiki armed conflicts scraper =======================
+
+//    $url = 'https://en.wikipedia.org/wiki/List_of_wars:_1990%E2%80%932002';
+//    $url = 'https://api.wikimedia.org/core/v1/wikipedia/en/page/List_of_wars:_1990%E2%80%932002/html';
+//    $protocolDomain = 'https://en.wikipedia.org/wiki';
+//    $html = file_get_contents($url);
+//
+////    $pos = strpos($html, '<tbody>');
+////    echo $pos;
+//    $start = strpos($html, '<table ');
+//    $end = strpos($html, '</table>');
+//
+//    $table = substr($html, $start, $end - $start + 8);
+//    $result = '';
+//    $rowBeg = 0;
+//    $rowEnd = 0;
+//
+//
+//    $iter = 0;
+//
+//    while(true){
+//        $iter++;
+//
+//        $rowBeg = strpos($table, '<tr ', $rowBeg);
+//        $rowEnd = strpos($table, '</tr>', $rowEnd);
+//
+//        if($iter < 3){
+//            $rowBeg++;
+//            $rowEnd++;
+//            continue;
+//        }
+//
+//        if($iter > 20){
+//            break;
+//        }
+//
+//        if($iter % 2 == 0){
+//            echo '<div style="background-color: #dddddd">';
+//        } else {
+//            echo '<div style="background-color: #ffffff">';
+//        }
+//        echo substr($table, $rowBeg, $rowEnd - $rowBeg);
+//        echo '</div>';
+//        echo '</br>';
+//
+//        $rowBeg++;
+//        $rowEnd++;
+//    }
+
+//    return $table;
+
 });
 
 //Route::get("test", function (Request $request) {

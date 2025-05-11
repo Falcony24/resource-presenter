@@ -191,11 +191,24 @@ function renderChart(resourceId) {
   });
 }
 
-resourceSelect.addEventListener('change', (e) => {
-  const resourceId = e.target.value;
-  if (resourceId) {
-    renderChart(resourceId);
-  }
+resourceSelect.addEventListener('change', async (e) => {
+    const resourceId = e.target.value;
+    const resourceName = resources.find((elem) => {
+        elem.id === resourceId
+    }).name;
+
+    if (priceData.resourceId === undefined) {
+        const units = await fetch(`/commodityUnits/${resourceName}`);
+
+        units.forEach((elem) => {
+
+        });
+        await fetch()
+    }
+
+    if (resourceId) {
+        renderChart(resourceId);
+    }
 });
 
 timeRangeSelect.addEventListener('change', (e) => {

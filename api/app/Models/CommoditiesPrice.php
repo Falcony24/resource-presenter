@@ -9,7 +9,7 @@ class CommoditiesPrice extends Model
 {
     protected $table = 'commodities_prices';
 
-    protected $fillable = ["name", "date", "value", "unit"];
+    protected $fillable = ["commodity", "date", "value", "unit"];
 
     public $timestamps = false;
 
