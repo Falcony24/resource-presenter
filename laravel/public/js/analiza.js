@@ -192,18 +192,26 @@ function renderChart(resourceId) {
 }
 
 resourceSelect.addEventListener('change', async (e) => {
-    const resourceId = e.target.value;
-    const resourceName = resources.find((elem) => {
-        elem.id === resourceId
-    }).name;
+    const resourceId = parseInt(e.target.value);
+    const resourceName = resources.find((elem) => elem.id === resourceId).name;
 
-    if (priceData.resourceId === undefined) {
-        const units = await fetch(`/commodityUnits/${resourceName}`);
-
-        units.forEach((elem) => {
-
-        });
-        await fetch()
+    if (priceData[resourceId] === undefined) {
+        await fetch(`/api/commodityPrices/IX/${resourceName}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log({data});
+                var tmpArr = [];
+                data.forEach((elem) => {
+                    tmpArr.push({
+                        date: elem.date,
+                        price: elem.value
+                    })
+                })
+                priceData[resourceId] = tmpArr;
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     }
 
     if (resourceId) {

@@ -41,7 +41,7 @@ class CommodityController extends Controller
         $commodityType = CommoditiesType::where('name', '=', $commodity)->firstOr(function () use (&$errorMessege) {
             $errorMessege .= "Commodity not found\n";
         });
-        $commodityUnit = CommoditiesPricesUnit::where('name', '=', $unit)->firstOr(function () use (&$errorMessege) {
+        $commodityUnit = CommoditiesPricesUnit::where('symbol', '=', $unit)->firstOr(function () use (&$errorMessege) {
             $errorMessege .= "Unit not found\n";
         });
 
