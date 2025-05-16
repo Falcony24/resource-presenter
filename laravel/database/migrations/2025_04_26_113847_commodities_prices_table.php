@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if(Schema::hasTable('commodities_prices')) return;
         Schema::create('commodities_prices', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->unsignedBigInteger('commodity');

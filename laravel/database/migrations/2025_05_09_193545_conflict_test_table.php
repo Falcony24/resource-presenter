@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if(Schema::hasTable('conflict_test')) return;
         Schema::create('conflict_test', function (Blueprint $table) {
             $table->id()->autoIncrement()->primary();
             $table->string('name')->nullable();

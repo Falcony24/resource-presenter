@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if(Schema::hasTable('commodities_types')) return;
         Schema::create('commodities_types', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('name');

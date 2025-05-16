@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if(Schema::hasTable('country_code')) return;
         Schema::create('country_code', static function (Blueprint $table) {
             $table->id()->autoIncrement()->primary();
             $table->string('iso_name');
