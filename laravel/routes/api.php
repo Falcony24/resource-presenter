@@ -6,6 +6,8 @@ use App\Models\CommoditiesPrice;
 use App\Models\CommoditiesPricesUnit;
 use App\Models\CommoditiesType;
 use App\Models\Conflict;
+use App\Models\ConflictTest2;
+use App\Models\Country;
 use App\Utils\CompareDates as CompareDates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,50 +34,167 @@ Route::get('/conflicts/description', [ConflictController::class, 'getDescription
 
 Route::get('/test', function (Request $request) {
 
-    $finalRet = [];
+//    return print_r(explode(', ', "Cambodia,"));
 
-    set_time_limit(30000);
+    set_time_limit(100000);
 
-    foreach(CommoditiesType::pluck('name')->toArray() as $commodityType) {
+    $url = 'https://war-memorial.net/wars_all.asp?q=3';
+    $domain = 'https://war-memorial.net/';
 
-        $tmp = json_decode(file_get_contents("http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." .
-            $commodityType .
-            "?startPeriod=1900&endPeriod=" . date('Y')), true);
+    $response = file_get_contents($url);
+    $containerStart = strpos($response, '<div class="maincol semi-wide">');
 
-        $commodityId = CommoditiesType::where('name', $commodityType)->first()->id;
+    $start = strpos($response, '<table ', $containerStart);
+    $end = strpos($response, '</table>', $start);
 
-        foreach($tmp['CompactData']['DataSet']['Series'] as $batch){
-            $unit = $batch['@UNIT_MEASURE'];
-            $unitId = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
-            $values = $batch['Obs'];
+    if ($start === false || $end === false) {
+        return "ERROR";
+    }
 
-            foreach($values as $value){
-                CommoditiesPrice::create([
-                    'commodity' => $commodityId,
-                    'date' => date_create($value['@TIME_PERIOD'])->format("Y-m-t"),
-                    'value' => $value['@OBS_VALUE'],
-                    'unit' => $unitId,
-                ])->save();
-            }
+    $end += strlen('</table>');
+    $table = substr($response, $start, $end - $start);
+
+    $rowStart = 0;
+    $iter = 0;
+
+    $warsData = [];
+
+    echo '<table>';
+
+    while (true) {
+        $rowStart = strpos($table, '<tr', $rowStart);
+        if ($rowStart === false) {
+            break;
         }
-    };
 
-//    return $tmp['CompactData']['DataSet']['Series'];
+        $rowEnd = strpos($table, '</tr>', $rowStart);
+        if ($rowEnd === false) {
+            break;
+        }
 
-    return CommoditiesType::first()->name;
+        $rowEnd += strlen('</tr>');
+        $row = substr($table, $rowStart, $rowEnd - $rowStart);
+        if($iter !== 0){
+            echo $row;
 
-    CommoditiesType::all()->each(function (CommoditiesType $commodityType) {
-        try{
-            $url = "http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." . $commodityType->name .
-                "?startPeriod=1900&endPeriod=" . date('Y');
+            $tdPos = strpos($row, '<td ');
+            $warNameStart = strpos($row, '>', $tdPos) + 1;
+            $warNameEnd = strpos($row, '</td>', $tdPos);
+            $warName = str_replace(['	', "\n", "\r\n", "\n\r", "\r"], '', strip_tags(substr($row, $warNameStart,
+                $warNameEnd -
+                $warNameStart)));
 
-            $response = file_get_contents($url);
+            $warLinkStart = strpos($row, '<a href="') + 9;
+            $warLinkEnd = strpos($row, '"', $warLinkStart);
+            $warLink = substr($row, $warLinkStart, $warLinkEnd - $warLinkStart);
 
-            $data = json_decode($response, true);
+            $tdPos = strpos($row, '<td ', $tdPos + 1);
+            $dateStart = strpos($row, '>', $tdPos) + 1;
+            $dateEnd = strpos($row, '</td>', $tdPos);
+            $dates = explode('-', substr($row, $dateStart, $dateEnd - $dateStart));
 
-            return $data;
+            $tdPos = strpos($row, '<td ', $tdPos + 1);
+            $casualtiesStart = strpos($row, '>', $tdPos) + 1;
+            $casualtiesEnd = strpos($row, '</td>', $tdPos);
+            $casualties = substr($row, $casualtiesStart, $casualtiesEnd - $casualtiesStart);
+            $casualties = str_replace(',', '', $casualties);
 
-            $finalRet[] = $data;
+            $conflict_details = file_get_contents($domain . $warLink);
+            $curPos = strpos($conflict_details, 'Nation(s) involved and/or conflict territory');
+            $curPos = strpos($conflict_details, '<a ', $curPos);
+            $curPos = strpos($conflict_details, '<a ', $curPos + 1);
+            $countriesEnd = strpos($conflict_details, '</p>', $curPos);
+            $countries = explode(', ', strip_tags(substr($conflict_details, $curPos, $countriesEnd - $curPos)));
+            $countries = array_diff($countries, ['', ' ']);
+
+            $warsData[] = [
+                'war_name' => $warName,
+                'war_link' => $domain . $warLink,
+                'start_date' => $dates[0],
+                'end_date' => $dates[1],
+                'casualties' => $casualties,
+                'countries' => $countries,
+            ];
+        }
+
+        $rowStart = $rowEnd;
+
+        $iter++;
+        if ($iter > 10000) {
+            break;
+        }
+    }
+
+    echo '</table>';
+
+//    return print_r($warsData);
+
+    foreach ($warsData as $warsDataItem) {
+        $conflict = ConflictTest2::make([
+            'name' => $warsDataItem['war_name'],
+            'link' => $warsDataItem['war_link'],
+            'start_date' => date_create(str_replace(' ', '', $warsDataItem['start_date']) . '-01-01')->format('Y-01-01'),
+            'end_date' => date_create(str_replace(' ', '', $warsDataItem['end_date']) . '-12-31')->format('Y-01-01'),
+            'casualties' => $warsDataItem['casualties'],
+        ]);
+
+        $conflict->save();
+
+        foreach($warsDataItem['countries'] as $country) {
+            $involvedCountry = Country::firstOrCreate(['name' => $country]);
+            $involvedCountry->save();
+
+            $conflict->countries()->attach($involvedCountry->id);
+        }
+        echo date_create(str_replace(' ', '', $warsDataItem['start_date']) . '-01-01')->format('Y-m-d') . '</br>';
+    }
+
+//    return substr($response, $start, $end - $start);
+
+//    $finalRet = [];
+//
+//    set_time_limit(30000);
+//
+//    foreach(CommoditiesType::pluck('name')->toArray() as $commodityType) {
+//
+//        $tmp = json_decode(file_get_contents("http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." .
+//            $commodityType .
+//            "?startPeriod=1900&endPeriod=" . date('Y')), true);
+//
+//        $commodityId = CommoditiesType::where('name', $commodityType)->first()->id;
+//
+//        foreach($tmp['CompactData']['DataSet']['Series'] as $batch){
+//            $unit = $batch['@UNIT_MEASURE'];
+//            $unitId = CommoditiesPricesUnit::where('symbol', $unit)->first()->id;
+//            $values = $batch['Obs'];
+//
+//            foreach($values as $value){
+//                CommoditiesPrice::create([
+//                    'commodity' => $commodityId,
+//                    'date' => date_create($value['@TIME_PERIOD'])->format("Y-m-t"),
+//                    'value' => $value['@OBS_VALUE'],
+//                    'unit' => $unitId,
+//                ])->save();
+//            }
+//        }
+//    };
+//
+////    return $tmp['CompactData']['DataSet']['Series'];
+//
+//    return CommoditiesType::first()->name;
+//
+//    CommoditiesType::all()->each(function (CommoditiesType $commodityType) {
+//        try{
+//            $url = "http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." . $commodityType->name .
+//                "?startPeriod=1900&endPeriod=" . date('Y');
+//
+//            $response = file_get_contents($url);
+//
+//            $data = json_decode($response, true);
+//
+//            return $data;
+//
+//            $finalRet[] = $data;
 
 //            foreach ($data['CompactData']['DataSet']['Series'] as $batch){
 //                $unit = $batch["@UNIT_MEASURE"];
@@ -121,13 +240,13 @@ Route::get('/test', function (Request $request) {
 //
 //                $commodityType->prices()->createMany($recordData)->save();
 
-        } catch (\Exception $exception) {
-            return 'ERROR';
-        }
-    });
-
-//    return json_encode($finalRet);
-    return $finalRet;
+//        } catch (\Exception $exception) {
+//            return 'ERROR';
+//        }
+//    });
+//
+////    return json_encode($finalRet);
+//    return $finalRet;
 
     //===================== wiki armed conflicts scraper =======================
 
