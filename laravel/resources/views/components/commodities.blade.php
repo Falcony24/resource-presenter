@@ -1,7 +1,7 @@
 @props(['commodities' => []])
 @javascript(['commodities' => $commodities])
 
-<x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']">
+<x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']" title='Ceny surowców'>
     <body>
         <x-header-nav />
         <div id="data"></div>

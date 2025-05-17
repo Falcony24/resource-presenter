@@ -1,6 +1,7 @@
 @props(['styleSheets' => ['css/app.css']])
 
-<x-layouts.main :styleSheets="['css/style.css', 'css/footer.css', 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css']">
+<x-layouts.main :styleSheets="['css/style.css', 'css/footer.css', 'https://unpkg.com/leaflet@1.9.3/dist/leaflet
+.css']" title='Strona główna'>
     <x-header-nav />
 
     <header class="background-image">

@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout title='Zresetuj hasło'>
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 

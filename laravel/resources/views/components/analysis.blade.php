@@ -1,4 +1,5 @@
-<x-layouts.main title='Analiza' :styleSheets="['css/style.css', 'css/footer.css', 'css/analiza.css']" :scripts="['https://cdn
+<x-layouts.main title='Analiza cen' :styleSheets="['css/style.css', 'css/footer.css', 'css/analiza.css']"
+                :scripts="['https://cdn
 .tailwindcss.com', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js', 'https://cdn.jsdelivr
 .net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js', 'https://cdn.jsdelivr
 .net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js']">

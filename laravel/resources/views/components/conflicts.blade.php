@@ -2,7 +2,7 @@
 
 @javascript(['conflicts' => getConflictsWithLocations(), 'conflictsLocations' => $conflictsLocations])
 
-<x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']">
+<x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']" title='Lista konflików'>
     <body>
     <x-header-nav />
 
