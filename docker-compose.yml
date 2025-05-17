@@ -41,6 +41,7 @@ services:
 
   redis:
     image: redis:7.4.3
+    container_name: redis
     ports:
       - "6379:6379"
     volumes:
@@ -58,13 +59,20 @@ services:
     container_name: redis-exporter
     ports:
       - "9121:9121"
+    environment:
+      REDIS_ADDR: "redis:6379"
     networks:
       - app-network
     depends_on:
       - redis
 
   laravel:
-    build: ./laravel
+    build:
+      context: ./laravel
+      dockerfile: Dockerfile
+      args:
+        APACHE_DOCUMENT_ROOT: /var/www/html/public
+        SERVERNAME: localhost
     container_name: laravel
     ports:
       - "5000:80"
