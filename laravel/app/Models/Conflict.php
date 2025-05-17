@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Conflict extends Model
 {
@@ -10,20 +11,16 @@ class Conflict extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['conflict_id',
-        'location',
-        'side_a',
-        'side_a_2nd',
-        'side_b',
-        'side_b_2nd',
-        'incompatibility',
-        'territory_name',
-        'year',
-        'intensity_level',
-        'cumulative_intensity',
-        'type_of_conflict',
+    public $fillable = [
+        'name',
+        'link',
         'start_date',
-        'start_date_2nd',
         'end_date',
-        'region'];
+        'casualties',
+    ];
+
+    public function countries() : BelongsToMany
+    {
+        return $this->belongsToMany(Country::class, 'involvment', 'conflict_id');
+    }
 }

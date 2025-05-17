@@ -1,5 +1,6 @@
-@props(['conflicts' => [], 'conflictsLocations' => getConflictsLocations()])
-@javascript(['conflicts' => $conflicts, 'conflictsLocations' => $conflictsLocations])
+@props(['conflicts' => getConflictsWithLocations(), 'conflictsLocations' => getConflictsLocations()])
+
+@javascript(['conflicts' => getConflictsWithLocations(), 'conflictsLocations' => $conflictsLocations])
 
 <x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']">
     <body>
@@ -16,11 +17,8 @@
         <select id="countryFilter" onchange="filterConflicts()">
             <option value="">Wszystkie państwa</option>
             @foreach($conflictsLocations as $location)
-                <option value="{{ $loop->index }}">{{ $location }}</option>
+                <option value="{{ $location['id'] }}">{{ $location['name'] }}</option>
             @endforeach
-            <option value="1">Ukraina</option>
-            <option value="2">Syria</option>
-            <option value="3">Afganistan</option>
         </select>
         <div class="filter-date">
             <label for="startDateFilter">Data rozpoczęcia</label>
@@ -47,9 +45,10 @@
         <thead>
         <tr>
             <th>Nazwa konfliktu</th>
-            <th>Data rozpoczęcia</th>
-            <th>Data zakończenia</th>
-            <th>Państwo/Kontynent</th>
+            <th>Rok rozpoczęcia</th>
+            <th>Rok zakończenia</th>
+            <th>Ofiary</th>
+            <th>Państwo</th>
         </tr>
         </thead>
         <tbody id="conflictsTableBody">

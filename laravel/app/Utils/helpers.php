@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Conflict;
+use App\Models\Country;
 
 function getConflictsRegions(): array{
     $tmpArr = Conflict::all()->groupBy('region')->toArray();
@@ -31,27 +32,22 @@ function getConflictsRegions(): array{
 }
 
 function getConflictsLocations(): array{
-    $tmpArr = Conflict::all()->groupBy('location')->toArray();
+    $tmpArr = Country::all()->toArray();
+//    sort($tmpArr);
+    usort($tmpArr, function ($a, $b) {
+        return strcmp($a['name'], $b['name']);
+    });
 
-    $return = [];
+    return $tmpArr;
+}
 
-    foreach($tmpArr as $key => $value){
-        $return[] = $key;
-    }
+function getCountriesForConflict(Conflict $conflict): array {
+    return $conflict->countries()->get()->pluck('name')->toArray();
+}
 
-    $tmpArr = $return;
-    $return = [];
-
-    foreach($tmpArr as $key => $value){
-        foreach(explode(", ", $value) as $item){
-            $return[] = $item;
-        }
-    }
-
-    $return = array_unique($return);
-    sort($return);
-
-    return $return;
+function getConflictsWithLocations(): array
+{
+    return Conflict::with('countries')->get()->toArray();
 }
 
 function getConflictsIntensityLevels():array {

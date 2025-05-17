@@ -15,6 +15,6 @@ class Country extends Model
 
     public function conflicts() : BelongsToMany
     {
-        return $this->belongsToMany(ConflictTest2::class, 'involvment', 'country_id');
+        return $this->belongsToMany(Conflict::class, 'involvment', 'country_id');
     }
 }

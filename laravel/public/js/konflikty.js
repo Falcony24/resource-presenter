@@ -9,6 +9,11 @@ window.conflictsLocations.forEach((element, index) => {
     countryMap[index] = element;
 });
 
+var tmp = window.conflicts;
+
+console.log(window.conflictsLocations);
+
+console.log({tmp});
 
 var countryMapArray = Object.values(countryMap);
 
@@ -16,13 +21,15 @@ let conflicts = [];
 
 window.conflicts.forEach((element, index) => {
     conflicts.push({
-        id: index,
-        name: 'tmp',
-        start_date: element.start_date_2nd,
-        end_date: element.end_date === "" ? 'trwa' : element.end_date,
+        id: element.id,
+        name: element.name,
+        link: element.link,
+        start_date: element.start_date.substring(0, 4),
+        end_date: element.end_date.substring(0, 4),
+        countries: element.countries,
+        casualties: element.casualties,
         longitude: 0.0,
         latitude: 0.0,
-        countries_id: findIndices(countryMapArray, element.location.split(', '))
     })
 })
 
@@ -39,12 +46,20 @@ function renderConflictsPage(page) {
   const pageConflicts = filteredConflicts.slice(start, end);
 
   pageConflicts.forEach(conflict => {
-    const countryNames = conflict.countries_id.map(id => countryMap[id]).join(', ');
+    // const countryNames = conflict.countries_id.map(id => countryMap[id]).join(', ');
+      const countryNames = conflict.countries.map((element, index) => {
+          if(index !== 0){
+              return ' ' + element.name;
+          } else {
+              return element.name;
+          }
+      });
     const row = `
         <tr>
-          <td>${conflict.name}</td>
+          <td><a href='${conflict.link}' target="_blank" rel="noopener noreferrer">${conflict.name}</a></td>
           <td>${conflict.start_date}</td>
           <td>${conflict.end_date}</td>
+          <td>${conflict.casualties}</td>
           <td>${countryNames}</td>
         </tr>
       `;
