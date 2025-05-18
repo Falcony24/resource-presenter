@@ -11,7 +11,10 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     redis-tools \
     curl gnupg \
-    && docker-php-ext-install pdo pdo_mysql zip mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo pdo_mysql zip mbstring exif pcntl bcmath gd \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+
 
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
