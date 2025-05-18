@@ -73,6 +73,8 @@ services:
       args:
         APACHE_DOCUMENT_ROOT: /var/www/html/public
         SERVERNAME: localhost
+    env_file:
+      - /laravel/.env
     container_name: laravel
     ports:
       - "5000:80"

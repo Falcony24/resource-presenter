@@ -2,4 +2,5 @@ services:
   laravel:
     volumes:
       - ./laravel:/var/www/html
-      - ./laravel/.env.development:/var/www/html/.env
+    env_file:
+      - /laravel/.env.development

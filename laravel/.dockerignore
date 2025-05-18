@@ -2,7 +2,6 @@ public/storage
 vendor/
 node_modules/
 storage/*.key
-.env
 .env.example
 .git
 .gitignore

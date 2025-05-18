@@ -1,8 +1,15 @@
-Aplikacje tworzymy wpisując (najłatwiej) z głównego folderu projektu polecenie:
-docker compose up -d --build
+### Aplikacje tworzymy wpisując (najłatwiej) z głównego folderu projektu polecenie:
+> **docker compose up -d --build**
+
+albo
+
+> **docker compose -f docker-compose.yml up -d --build**
+
+Pierwszy sposób jest trybem dev, powiedzmy, tzn. zostanie użyte to co jest w docker-compose.override.yml.
+Drugi sposób nie używa pliku .override.yml.
 
 Jak kontenery zostaną stworzone trzeba ręcznie zapełnić bazę danymi:
-  php artisan migrate:fresh --seed
+> **php artisan migrate:fresh --seed**
 
 Pobieranie listy dostępnych surowców:
 http://localhost:8000/api/commoditiesTypes
