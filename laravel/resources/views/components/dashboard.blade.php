@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-[#413a1e] leading-tight">
             {{ __('Eksport danych') }}
         </h2>
     </x-slot>
@@ -9,21 +9,22 @@
         Eksport Danych
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 bg-[#efe7d8] min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('export') }}" aria-label="Formularz eksportu danych">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-[#928c61]/30">
+                <div class="p-6 text-[#413a1e]">
+                    <form method="POST" action="{{ route('export') }}" aria-label="Formularz eksportu danych" class="space-y-6">
                         @csrf
 
-                        <div class="mb-4">
-                            <label for="format" class="block text-sm font-medium text-gray-700">
+                        <!-- Format Selection -->
+                        <div class="space-y-2">
+                            <label for="format" class="block text-sm font-medium text-[#413a1e]">
                                 Wybierz format
                             </label>
                             <select
                                 name="format"
                                 id="format"
-                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                                class="mt-1 block w-full px-4 py-3 border border-[#928c61]/50 rounded-lg focus:ring-2 focus:ring-[#928c61] focus:border-[#413a1e] transition bg-[#efe7d8]/20"
                                 required
                             >
                                 <option value="json">JSON</option>
@@ -31,14 +32,15 @@
                             </select>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="option" class="block text-sm font-medium text-gray-700">
+                        <!-- Data Selection -->
+                        <div class="space-y-2">
+                            <label for="option" class="block text-sm font-medium text-[#413a1e]">
                                 Wybierz dane
                             </label>
                             <select
                                 name="option"
                                 id="option"
-                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                                class="mt-1 block w-full px-4 py-3 border border-[#928c61]/50 rounded-lg focus:ring-2 focus:ring-[#928c61] focus:border-[#413a1e] transition bg-[#efe7d8]/20"
                                 required
                             >
                                 <option value="conflicts">Konflikty</option>
@@ -46,16 +48,20 @@
                             </select>
                         </div>
 
-                        <button
-                            type="submit"
-                            id="exportButton"
-                            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                            aria-label="Eksportuj dane do wybranego formatu"
-                            title="Eksportuj dane"
-                            aria-labelledby="exportButton"
-                        >
-                            Eksportuj
-                        </button>
+                        <!-- Export Button -->
+                        <div class="mt-8">
+                            <button
+                                type="submit"
+                                id="exportButton"
+                                class="w-full px-6 py-3 bg-[#413a1e] hover:bg-[#928c61] text-white font-medium rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#928c61] focus:ring-offset-2 shadow-md hover:shadow-lg"
+                                aria-label="Eksportuj dane do wybranego formatu"
+                            >
+                                Eksportuj
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2 -mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
