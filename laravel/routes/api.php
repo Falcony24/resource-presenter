@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/commodities/create', [CommodityController::class, 'createPriceForm'])->name('commodities.create');
 Route::post('/commodities/store', [CommodityController::class, 'storePrice'])->name('commodities.store');
-
-
+//dodałam do dodawania!!!!!!
+Route::get('/conflicts/create', [ConflictController::class, 'create'])->name('conflicts.create');
+Route::post('/conflicts', [ConflictController::class, 'store'])->name('conflicts.store');
+//=========
 Route::get('/user', function (Request $request) {
     return $request->user();
 });

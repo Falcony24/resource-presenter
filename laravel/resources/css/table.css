@@ -17,7 +17,7 @@ body {
   background: var(--main-bg);
   min-height: 100vh;
   color: var(--text);
-  padding: 32px 0;
+  padding: 0;
 }
 
 nav {
@@ -252,4 +252,110 @@ input, select {
   color: #b3a989;
   border-color: #efe7d8;
   box-shadow: none;
+}
+
+.login-prompt a{
+    color:#5e5437;
+}
+.login-prompt{
+    padding-left: 40px;
+}
+/* Modal */
+#addCommodityModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* Nakładka na tło */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Zawartość modala */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    position: relative;
+    z-index: 1000;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+        table tbody tr td:first-child a {
+            color: #5e5437;
+            text-decoration: none; 
+        }
+
+
+        table tbody tr td:first-child a:hover {
+            text-decoration: underline; 
+        }
+    /* Media Queries dla responsywności */
+
+
+@media (max-width: 900px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(128, 115, 78, 0.07);
+    border-radius: 8px;
+    background: var(--white);
+  }
+
+  td {
+    padding: 14px 18px;
+    position: relative;
+    text-align: right;
+    font-size: 1em;
+  }
+
+  td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 18px;
+    top: 14px;
+    font-weight: bold;
+    color: var(--accent);
+    text-align: left;
+  }
+}
+.page-header {
+  display: flex;
+  align-items: center;         
+  justify-content: flex-start; 
+  gap: 8px;                    
+    padding: 20px 20px 20px 1000px;
+}
+
+.page-header__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.page-header__add img {
+  width: 32px;
+  height: 32px;
 }

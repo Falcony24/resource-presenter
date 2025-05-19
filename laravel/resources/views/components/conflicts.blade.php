@@ -2,15 +2,15 @@
 
 @javascript(['conflicts' => getConflictsWithLocations(), 'conflictsLocations' => $conflictsLocations])
 
-<x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']" title='Lista konflików'>
+<x-layouts.main :styleSheets="['css/table.css', 'css/footer.css']" title='Lista konfliktów'>
     <body>
     <x-header-nav />
-
-    <h1>Lista konfliktów zbrojnych</h1>
-        <!-- Przycisk z ikonką plusa w prawym górnym rogu -->
-        <a href="" style="position: absolute; top: 80px; right: 550px;">
-            <img src="{{ asset('img/plus.png') }}" alt="Dodaj" style="width: 32px; height: 32px;">
-        </a>
+<header class="page-header">
+  <h1 class="page-header__title">Lista konfliktów zbrojnych</h1>
+  <a href="#" class="page-header__add">
+    <img src="{{ asset('img/plus.png') }}" alt="Dodaj">
+  </a>
+</header>
 
     <div class="filters">
         <input type="text" id="searchInput" placeholder="Szukaj konfliktu..." onkeyup="filterConflicts()">
@@ -20,13 +20,14 @@
                 <option value="{{ $location['id'] }}">{{ $location['name'] }}</option>
             @endforeach
         </select>
-        <div class="filter-date">
-            <label for="startDateFilter">Data rozpoczęcia</label>
-            <input type="date" id="startDateFilter" onchange="filterConflicts()">
-        </div>
-        <div class="filter-date">
-            <label for="endDateFilter">Data zakończenia</label>
-            <input type="date" id="endDateFilter" onchange="filterConflicts()">
+        <div class="filter-year-range">
+            <label for="yearRangeFilter">Zakres lat: <span id="yearRangeValue">1900 - 2023</span></label>
+            <div class="year-slider-container">
+                <div class="slider-wrapper">
+                    <input type="range" class="year-slider" id="yearRangeMin" min="1900" max="2023" value="1900" oninput="updateYearRange()">
+                    <input type="range" class="year-slider" id="yearRangeMax" min="1900" max="2023" value="2023" oninput="updateYearRange()">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -38,8 +39,6 @@
         </button>
     </form>
 </div>
-
-
 
     <table>
         <thead>
@@ -58,5 +57,6 @@
     <div class="pagination" id="pagination"></div>
 
     <script src="{{ asset('js/konflikty.js') }}"></script>
+
     </body>
 </x-layouts.main>

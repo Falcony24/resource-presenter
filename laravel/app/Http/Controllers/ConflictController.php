@@ -53,4 +53,27 @@ class ConflictController extends Controller
     {
         return ConflictsDescriptionAlias::$description;
     }
+    
+    
+    
+    //dodałam dodawanie !!!!!
+      public function create()
+    {
+        return view('conflicts.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'link' => 'nullable|url',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'casualties' => 'nullable|string|max:255',
+        ]);
+
+        Conflict::create($validated);
+
+        return redirect()->route('conflicts.create')->with('success', 'Konflikt został dodany.');
+    }
 }

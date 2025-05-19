@@ -6,11 +6,13 @@
         <x-header-nav />
         <div id="data"></div>
 
-        <h1>Lista surowców</h1>
-        <!-- Przycisk z ikonką plusa w prawym górnym rogu -->
-        <a href="{{ route('commodities.create') }}" style="position: absolute; top: 80px; right: 650px;">
-            <img src="{{ asset('img/plus.png') }}" alt="Dodaj" style="width: 32px; height: 32px;">
-        </a>
+<header class="page-header">
+  <h1 class="page-header__title">Lista surowców</h1>
+  <a href="{{ route('commodities.create') }}" class="page-header__add">
+    <img src="{{ asset('img/plus.png') }}" alt="Dodaj">
+  </a>
+</header>
+
 
         <div class="filters">
             <input type="text" id="searchInput" placeholder="Szukaj surowca..." onkeyup="filterResources()">

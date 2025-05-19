@@ -7,7 +7,7 @@
 
         <!-- Email Address -->
         <div class="space-y-2">
-            <x-input-label for="email" :value="__('Email')" class="text-[#413a1e] font-medium" />
+            <x-input-label for="email" :value="__('E-mail')" class="text-[#413a1e] font-medium" />
             <x-text-input 
                 id="email" 
                 class="block w-full px-4 py-3 border border-[#928c61]/30 rounded-lg focus:ring-2 focus:ring-[#413a1e]/50 focus:border-[#928c61] transition"
@@ -41,23 +41,22 @@
                 <input id="remember_me" type="checkbox" 
                     class="rounded border-[#928c61]/50 text-[#413a1e] focus:ring-[#928c61]/30" 
                     name="remember">
-                <span class="ms-2 text-sm text-[#413a1e]">{{ __('Remember me') }}</span>
+                <span class="ms-2 text-sm text-[#413a1e]">{{ __('Zapamiętaj mnie') }}</span>
             </label>
 
             @if (Route::has('password.request'))
                 <a class="text-sm text-[#928c61] hover:text-[#413a1e] font-medium transition" 
                    href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                    {{ __('Zapomniałeś hasła?') }}
                 </a>
             @endif
         </div>
 
         <!-- Submit Button -->
         <div class="mt-6">
-<x-primary-button class="w-full justify-center px-6 py-3 bg-[#5a4b22] hover:bg-[#b19f6a] text-white font-medium rounded-lg transition">
-    {{ __('Log in') }}
-</x-primary-button>
-
+            <x-primary-button class="w-full justify-center px-6 py-3 bg-[#5a4b22] hover:bg-[#b19f6a] text-white font-medium rounded-lg transition">
+                {{ __('Zaloguj się') }}
+            </x-primary-button>
         </div>
     </form>
 </x-guest-layout>
