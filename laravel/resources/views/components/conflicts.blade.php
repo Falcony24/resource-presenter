@@ -7,7 +7,7 @@
     <x-header-nav />
 <header class="page-header">
   <h1 class="page-header__title">Lista konfliktów zbrojnych</h1>
-  <a href="#" class="page-header__add">
+  <a href="{{  route("createConflict") }}" class="page-header__add">
     <img src="{{ asset('img/plus.png') }}" alt="Dodaj">
   </a>
 </header>

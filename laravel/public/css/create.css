@@ -2,7 +2,7 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
 */
-/* 
+/*
     Created on : 9 maj 2025, 19:07:26
     Author     : LENOVO
 */
@@ -19,6 +19,17 @@ body {
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
   background-color: #efe7d8;
+}
+
+.row_3_cols {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 10px;
+}
+
+.col1per3 {
+
 }
 
 h1 {
@@ -102,6 +113,46 @@ button[type="submit"]:active {
   margin: 20px 0;
   border-radius: 5px;
   text-align: center;
+}
+
+.main{
+    background-color: #ffffff;
+    padding: 30px;
+    max-width: 600px;
+    margin: 30px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.main button {
+    background-color: #80734e;
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+.main button:hover {
+    background-color: #6e602f;
+    transform: translateY(-2px);
+}
+
+.main button:active {
+    background-color: #80734e;
+    transform: translateY(1px);
+}
+
+.simple_text_link {
+    color: inherit;
+    text-decoration: inherit;
 }
 
 @media (max-width: 768px) {
