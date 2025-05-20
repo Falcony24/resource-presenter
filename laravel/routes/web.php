@@ -25,11 +25,18 @@ Route::get('/konflikty', function () {
     return view('components.conflicts', ['conflicts' => $tmp->getConflicts(request())]);
 })->name('conflicts');
 
+Route::get('/dodaj-konflikt', function () {
+    return view('components.createConflict');
+})->name('createConflict');
+
+Route::post('/dodaj-konflikt', [ConflictController::class, 'create'])->name('createConflict.create');
+
 Route::get('/analiza', function () {
     $tmp = new CommodityController();
     $tmp2 = new ConflictController();
     return view('components.analysis', ['commodities' => $tmp->getTypes(request()), 'conflicts' => $tmp2->getConflicts(request())]);
 })->name('analysis');
+
 Route::get('/dashboard', function () {
     return view('components.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

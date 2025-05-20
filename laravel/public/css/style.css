@@ -342,11 +342,11 @@ th, td {
 th {
   background-color: #80734e;
 }
-input[type="text"], input[type="date"], select {
+input, select {
   padding: 8px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-right: 10px;
 }
 input[type="text"] {
-  width: 300px;
+  /*width: 300px;*/
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Conflict;
+use App\Models\Country;
 use App\Utils\CompareDates;
 use App\Utils\ConflictsDescription as ConflictsDescriptionAlias;
 use Exception;
@@ -53,13 +54,39 @@ class ConflictController extends Controller
     {
         return ConflictsDescriptionAlias::$description;
     }
-    
-    
-    
+
+
+
     //dodałam dodawanie !!!!!
-      public function create()
+      public function create(Request $request)
     {
-        return view('conflicts.create');
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'link' => 'nullable|url',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'casualties' => 'nullable|string|max:255',
+            'countries' => 'required|string'
+        ]);
+
+        $countries = explode(';', $validated['countries']);
+
+        $newConflict = Conflict::create([
+            'name' => $validated['name'],
+            'link' => $validated['link'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'casualties' => $validated['casualties']
+        ]);
+
+        foreach($countries as $country){
+            $involvedCountry = Country::where('name', '=', $country)->firstOrCreate(['name' => $country]);
+            $newConflict->countries()->syncWithoutDetaching([$involvedCountry->id]);
+        }
+
+        $newConflict->save();
+
+        return view('components.add-conflict-success');
     }
 
     public function store(Request $request)
