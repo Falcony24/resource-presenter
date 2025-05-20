@@ -27,7 +27,8 @@ Route::get('/konflikty', function () {
 
 Route::get('/analiza', function () {
     $tmp = new CommodityController();
-    return view('components.analysis', ['commodities' => $tmp->getTypes(request())]);
+    $tmp2 = new ConflictController();
+    return view('components.analysis', ['commodities' => $tmp->getTypes(request()), 'conflicts' => $tmp2->getConflicts(request())]);
 })->name('analysis');
 Route::get('/dashboard', function () {
     return view('components.dashboard');
