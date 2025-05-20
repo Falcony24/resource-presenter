@@ -21,7 +21,7 @@ Pobieranie listy cen kusru surowca w poszczególnych miesiącach dla danego suro
 http://localhost:8000/api/commodityUnits/{unit}/{commodity}
 
 Pobieranie listy konfliktów:
-http://localhost:8000/api/conflicts?start_date=2010&start_date_2nd=2011&end_date=2012&region=1,2&location=Russia
+http://localhost:8000/api/conflicts?start_date=2010-01-01&end_date=2011-12-31&casualties_min=1000&casualties_max=2000
 
 Pobranie opisu danych konfliktów:
 http://localhost:8000/api/conflicts/description
