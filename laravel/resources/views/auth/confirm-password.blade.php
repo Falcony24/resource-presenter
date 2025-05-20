@@ -1,4 +1,4 @@
-<x-guest-layout title='Potwierdzanie hasła'>
+<x-guest-layout title="Potwierdzanie hasła">
     <div class="mb-6 p-4 bg-[#f9f7f2] text-[#413a1e] rounded-lg border border-[#928c61]/30 text-sm">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
     </div>

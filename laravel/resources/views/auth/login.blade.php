@@ -43,8 +43,8 @@
         <div class="flex items-center justify-between">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" 
-                    class="rounded border-[#928c61]/50 text-[#413a1e] focus:ring-[#928c61]/30" 
-                    name="remember">
+                       class="rounded border-[#928c61]/50 text-[#413a1e] focus:ring-[#928c61]/30" 
+                       name="remember" />
                 <span class="ms-2 text-sm text-[#413a1e]">{{ __('Zapamiętaj mnie') }}</span>
             </label>
 
