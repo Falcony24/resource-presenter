@@ -44,7 +44,15 @@ class ConflictController extends Controller
         });
 
         $query->when($request->has('start_date'), function ($q) use ($request) {
-            return $q->where('start_date', '>=', date_create($request->get('start_date_1st'))->format('Y-m-d'));
+            return $q->where('start_date', '>=', date_create($request->get('start_date'))->format('Y-m-d'));
+        });
+
+        $query->when($request->has('casualties_min'), function ($q) use ($request) {
+            return $q->where('casualties', '>=', $request->integer('casualties_min'));
+        });
+
+        $query->when($request->has('casualties_max'), function ($q) use ($request) {
+            return $q->where('casualties', '<=', $request->integer('casualties_max'));
         });
 
         return $query->get();
