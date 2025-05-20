@@ -7,6 +7,7 @@ use App\Models\CommoditiesPricesUnit;
 use App\Models\CommoditiesType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class CommoditiesPricesSeeder extends Seeder
 {
@@ -22,6 +23,13 @@ class CommoditiesPricesSeeder extends Seeder
             $tmp = json_decode(file_get_contents("http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/PCPS/M.." .
                 $commodityType .
                 "?startPeriod=1900&endPeriod=" . date('Y')), true);
+
+            // Sprawdzenie czy dane są prawidłowe
+            if (!isset($tmp['CompactData']['DataSet']['Series'])) {
+                Log::warning('Brak danych dla commodityType: ' . $commodityType);
+                Log::warning('Odpowiedź API: ' . json_encode($tmp));
+                continue;  // pomiń i przejdź do następnego surowca
+            }
 
             $commodityId = CommoditiesType::where('name', $commodityType)->first()->id;
 

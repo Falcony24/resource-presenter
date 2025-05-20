@@ -85,6 +85,7 @@ input[type="text"]:focus, input[type="date"]:focus, select:focus {
 }
 
 table {
+  table-layout: fixed; 
   width: 96%;
   margin: 0 auto;
   border-collapse: separate;
@@ -93,8 +94,12 @@ table {
   border-radius: 14px;
   box-shadow: 0 4px 32px rgba(128, 115, 78, 0.08);
   overflow: hidden;
+  min-height: 300px;
+  flex-grow: 1;
 }
-
+.empty-table {
+    margin-bottom: 100px; /* Отступ перед футером */
+}
 th, td {
   padding: 18px 14px;
   text-align: left;
@@ -297,3 +302,199 @@ input, select {
 .modal-content h2 {
     margin-top: 0;
 }
+        table tbody tr td:first-child a {
+            color: #5e5437;
+            text-decoration: none; 
+        }
+
+
+        table tbody tr td:first-child a:hover {
+            text-decoration: underline; 
+        }
+    /* Media Queries dla responsywności */
+
+
+@media (max-width: 900px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(128, 115, 78, 0.07);
+    border-radius: 8px;
+    background: var(--white);
+  }
+
+  td {
+    padding: 14px 18px;
+    position: relative;
+    text-align: right;
+    font-size: 1em;
+  }
+
+  td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 18px;
+    top: 14px;
+    font-weight: bold;
+    color: var(--accent);
+    text-align: left;
+  }
+}
+
+@media (max-width: 767px) {
+  td {
+    padding: 12px 12px;
+    font-size: 0.95em;
+  }
+}
+
+@media (max-width: 575px) {
+  td {
+    padding: 10px 10px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 400px) {
+  td {
+    padding: 8px 8px;
+    font-size: 0.85em;
+  }
+}
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;     /* Центрирование содержимого */
+  gap: 8px;
+  padding: 20px;
+  max-width: 1000px;           /* Максимальная ширина блока */
+  margin: 0 auto;              /* Центрирует блок по ширине */
+}
+
+
+.page-header__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.page-header__add img {
+  width: 32px;
+  height: 32px;
+}
+.page-header__title {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  pointer-events: all;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #5e5437;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+  margin-top: -6px;
+  position: relative;
+  z-index: 2;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  background: #ccc;
+  border-radius: 4px;
+}
+
+input[type=range]#rangeStart::-webkit-slider-thumb {
+  z-index: 3;
+}
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .filter-year-range {
+            display: flex;
+            flex-direction: column;
+            min-width: 300px;
+            flex-grow: 1;
+        }
+        
+        .year-slider-container {
+            width: 100%;
+            margin-top: 8px;
+        }
+        
+        .slider-wrapper {
+            position: relative;
+            height: 50px;
+        }
+        
+        .year-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #d3d3d3;
+            outline: none;
+            position: absolute;
+        }
+        
+        .year-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #5e5437;
+            cursor: pointer;
+        }
+        
+        .year-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #5e5437;
+            cursor: pointer;
+        }
+        
+        #yearRangeMin {
+            z-index: 2;
+            background: transparent;
+        }
+        
+        #yearRangeValue {
+            font-weight: bold;
+            color: #5e5437;
+        }
+        .page-wrapper {
+            min-height: 100vh;      /* чтобы минимум высота была равна высоте окна */
+            display: flex;
+            flex-direction: column;
+        }

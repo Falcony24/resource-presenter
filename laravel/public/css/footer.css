@@ -1,8 +1,37 @@
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.main-content {
+
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    flex-grow: 1;
+
+}
+
 .footer {
+
     background: #928c61;
     color: #efe7d8;
-    padding: 40px 0 10px 0;
+    padding: 10px 0 10px 0;
     font-family: Arial, sans-serif;
+    margin-top: 0;
+    height: 200px;
+    justify-content: flex-end; 
+    padding-bottom: 20px;  
+    flex-shrink: 0;
+
 }
 
 .footer-container {
@@ -16,13 +45,14 @@
 
 .footer-section {
     flex: 1 1 200px;
-    min-width: 200px;
+    min-width: 250px;
 }
 
 .footer-section h3 {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
+    
 }
 
 .footer-section ul {
@@ -48,13 +78,13 @@
 .footer-bottom {
     text-align: center;
     color: #efe7d8;
-    margin-top: 30px;
+    margin-top: 10px;
     font-size: 15px;
     border-top: 1px solid #928c61;
     padding-top: 10px;
 }
 
-/* Dla ekranów do 500px - karty i stopka */
+
 @media (max-width: 500px) {
     .footer-section {
         width: 100%;
@@ -65,3 +95,8 @@
         padding: 20px 0 5px 0;
     }
 }
+.main-content > *:last-child {
+        margin-bottom: 0;
+    padding-bottom: 0;
+}
+
