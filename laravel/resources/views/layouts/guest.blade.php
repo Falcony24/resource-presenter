@@ -15,6 +15,7 @@
 </head>
 <body class="font-sans antialiased bg-[#efe7d8]" style="font-family: 'Manrope', sans-serif">
     <div class="min-h-screen flex flex-col items-center justify-center p-6">
+        <!-- Modern logo container with advanced effects -->
         <div class="mb-12 group">
             <a href="/" class="
                 block p-3 rounded-full
@@ -35,14 +36,18 @@
             </a>
         </div>
 
+        <!-- Elevated card with delicate shadow -->
         <div class="w-full max-w-md bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-
+            <!-- Accent header bar with animation -->
             <div class="h-1.5 bg-gradient-to-r from-[#80734e] to-[#5e5437] group-hover:bg-gradient-to-l transition-all duration-500"></div>
             
+            <!-- Content area with subtle texture -->
             <div class="p-8 bg-white relative overflow-hidden">
+                <!-- Modern dot pattern with animation -->
                 <div class="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBmaWxsPSIjNWU1NDM3Ij48Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMSIvPjwvc3ZnPg==')] 
                     group-hover:opacity-10 transition-opacity duration-1000"></div>
-
+                
+                <!-- Subtle animated gradient in corner -->
                 <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-[#80734e]/5 group-hover:bg-[#5e5437]/10 blur-xl transition-all duration-1000"></div>
                 
                 <div class="relative">
@@ -51,6 +56,7 @@
             </div>
         </div>
 
+        <!-- Modern footer with hover effect -->
         <div class="mt-12">
             <a href="#" class="
                 text-xs text-[#5e5437]/50 hover:text-[#5e5437]/70 tracking-wide
