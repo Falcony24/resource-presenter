@@ -2,59 +2,36 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Dodaj konflikt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Surowiec</title>
+    
+    <!-- Link to your custom CSS file -->
     <link rel="stylesheet" href="{{ asset('css/create.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
-    <h1>Dodaj nowy konflikt</h1>
+    <h1>Dodaj Nowy Surowiec</h1>
 
-    @if (session('success'))
-        <div class="success-message">
-            {{ session('success') }}
-        </div>
-    @endif
+    <!-- Back Link in the Top-Right Corner -->
+    <a href="{{ route('commodities') }}" style="position: absolute; top: 20px; right: 1600px">
+        <img src="{{ asset('img/back.png') }}" alt="Powrót" style="width: 32px; height: 32px;">
+    </a>
 
-    @if ($errors->any())
-        <div class="error-message">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('createConflict.create') }}" method="POST">
+    <form action="{{ route('commodities.store') }}" method="POST">
         @csrf
+        <label for="name">Nazwa Surowca:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
 
-        <label for="name">Nazwa konfliktu</label>
-        <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+        <label for="description">Opis:</label>
+        <textarea id="description" name="description" required></textarea>
+        <br><br>
 
-        <label for="link">Link (np. Wikipedia)</label>
-        <input type="text" pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)" name="link" id="link" value="{{ old('link') }}">
-
-        <div class="row_3_cols">
-            <div>
-                <label for="start_date">Data rozpoczęcia</label>
-                <input type="date" name="start_date" id="start_date" placeholder="RRRR-MM-DD" value="{{ old('start_date') }}">
-            </div>
-
-            <div>
-                <label for="end_date">Data zakończenia</label>
-                <input type="date" name="end_date" id="end_date" placeholder="RRRR-MM-DD" value="{{ old('end_date') }}">
-            </div>
-
-            <div>
-                <label for="casualties">Ofiary śmiertelne</label>
-                <input type="number" min="0" step="1" name="casualties" id="casualties" value="{{ old('casualties') }}">
-            </div>
-        </div>
-
-        <label for="countries">Kraje zaangażowane (oddzielone znakiem ";")</label>
-        <input type="text" name="countries" id="countries" value="{{ old('link') }}">
-
-        <button type="submit">Dodaj konflikt</button>
+        <button type="submit">Zapisz Surowiec</button>
     </form>
+
+    @if(session('success'))
+        <p>{{ session('success') }}</p>
+    @endif
 </body>
 </html>
+

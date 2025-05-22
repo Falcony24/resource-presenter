@@ -33,7 +33,7 @@ window.conflicts.forEach((element, index) => {
     })
 })
 
-const conflictsPerPage = 30;
+const conflictsPerPage = 35;
 let currentPage = 1;
 let filteredConflicts = conflicts;
 
@@ -44,7 +44,7 @@ function updateYearRange() {
     let minYear = parseInt(minSlider.value);
     let maxYear = parseInt(maxSlider.value);
 
-    // Если перепутаны значения, исправляем
+
     if (minYear > maxYear) {
         [minYear, maxYear] = [maxYear, minYear];
         minSlider.value = minYear;
@@ -65,28 +65,35 @@ function renderConflictsPage(page) {
     const end = start + conflictsPerPage;
     const pageConflicts = filteredConflicts.slice(start, end);
 
-    pageConflicts.forEach(conflict => {
-        const countryNames = conflict.countries.map((element, index) => {
-            if(index !== 0){
-                return ' ' + element.name;
-            } else {
-                return element.name;
-            }
-        });
+    if (pageConflicts.length === 0) {
         const row = `
             <tr>
-                <td><a href='${conflict.link}' target="_blank" rel="noopener noreferrer">${conflict.name}</a></td>
-                <td>${conflict.start_date}</td>
-                <td>${conflict.end_date}</td>
-                <td>${conflict.casualties}</td>
-                <td>${countryNames}</td>
+                <td colspan="5" style="text-align: center; padding: 20px;">Brak danych do wyświetlenia</td>
             </tr>
         `;
-        tableBody.innerHTML += row;
-    });
+        tableBody.innerHTML = row;
+    } else {
+        pageConflicts.forEach(conflict => {
+            const countryNames = conflict.countries.map((element, index) => {
+                return index !== 0 ? ' ' + element.name : element.name;
+            });
+
+            const row = `
+                <tr>
+                    <td><a href='${conflict.link}' target="_blank" rel="noopener noreferrer">${conflict.name}</a></td>
+                    <td>${conflict.start_date}</td>
+                    <td>${conflict.end_date}</td>
+                    <td>${conflict.casualties}</td>
+                    <td>${countryNames}</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+    }
 
     renderPagination();
 }
+
 
 function renderPagination() {
     const paginationDiv = document.getElementById('pagination');
@@ -193,3 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     filterConflicts();
 });
+const tbody = document.querySelector('table tbody');
+const table = document.querySelector('table');
+if (tbody.children.length === 0) {
+    table.classList.add('empty');
+} else {
+    table.classList.remove('empty');
+}

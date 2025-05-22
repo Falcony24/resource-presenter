@@ -70,3 +70,10 @@ function filterResources() {
 
 // Inicjalizacja strony
 filterResources();
+const tbody = document.querySelector('table tbody');
+const table = document.querySelector('table');
+if (tbody.children.length === 0) {
+    table.classList.add('empty');
+} else {
+    table.classList.remove('empty');
+}
