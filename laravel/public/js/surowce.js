@@ -15,26 +15,28 @@ let currentPage = 1;
 let filteredResources = resources;
 
 function renderResourcesPage(page) {
-  const tableBody = document.getElementById('resourcesTableBody');
-  tableBody.innerHTML = '';
+    const tableBody = document.getElementById('resourcesTableBody');
+    tableBody.innerHTML = '';
 
-  const start = (page - 1) * resourcesPerPage;
-  const end = start + resourcesPerPage;
-  const pageResources = filteredResources.slice(start, end);
+    const start = (page - 1) * resourcesPerPage;
+    const end = start + resourcesPerPage;
+    const pageResources = filteredResources.slice(start, end);
 
-  pageResources.forEach(resource => {
-    const row = `
-        <tr>
-          <td>${resource.name}</td>
-          <td>${resource.description}</td>
-        </tr>
-      `;
-    tableBody.innerHTML += row;
-  });
+    if (pageResources.length === 0) {
+        const row = `<tr><td colspan="2" style="text-align: center;">Brak danych do wyświetlenia</td></tr>`;
+        tableBody.innerHTML = row;
+    } else {
+        pageResources.forEach(resource => {
+            const row = `<tr>
+                <td>${resource.name}</td>
+                <td>${resource.description}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
 
-  renderPagination();
+    renderPagination();
 }
-
 function renderPagination() {
   const paginationDiv = document.getElementById('pagination');
   paginationDiv.innerHTML = '';
